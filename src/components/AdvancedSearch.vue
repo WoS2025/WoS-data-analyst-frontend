@@ -9,42 +9,42 @@
               hidden_btn();
               show_search(1);
             "
-            >根據年份區間做關鍵字分析</a
+            >關鍵字</a
           >
           <a
             @click="
               hidden_btn();
               show_search(3);
             "
-            >關鍵字成長趨勢</a
+            >關鍵字成長</a
           >
           <a
             @click="
               hidden_btn();
               show_search(4);
             "
-            >根據年份區間對作者分析</a
+            >作者</a
           >
           <a
             @click="
               hidden_btn();
               show_search(5);
             "
-            >根據引用次數做分析</a
+            >引用次數</a
           >
           <a
             @click="
               hidden_btn();
               show_search(6);
             "
-            >根據年份區間做研究領域分析</a
+            >研究領域</a
           >
           <a
             @click="
               hidden_btn();
               show_search(8);
             "
-            >研究領域每年的成長趨勢</a
+            >領域成長</a
           >
         </div>
       </div>
@@ -183,7 +183,7 @@
   </div>
 </template>
   
-  <script setup>
+<script setup>
 import { ref, watch } from "vue";
 import { VueSpinnerHourglass } from "vue3-spinners";
 
@@ -768,11 +768,11 @@ async function drawChart_singleField() {
 .dropdown {
   position: relative;
   display: inline-block;
-  margin-bottom: 20px;
+  margin-bottom: 195px;
 }
 
 .dropbtn {
-  width: 120%;
+  width: 170%;
   background-color: #333;
   color: white;
   padding: 10px 20px;
@@ -787,6 +787,7 @@ async function drawChart_singleField() {
 }
 
 .dropdown-content {
+  width: 150%;
   display: none;
   position: absolute;
   background-color: #f9f9f9;
