@@ -1,0 +1,74 @@
+.layout-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.work-area-wrapper {
+  width: 100%;
+}
+
+.upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashes {
+  width: 300px;
+  border: 2px solid #ccc;
+  background: rgb(156, 153, 153);
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-label {
+  color: aliceblue;
+}
+
+.main-subheader {
+  margin-bottom: 20px;
+}
+
+.btn-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.file-upload-input {
+  display: none;
+}
+
+.file-list {
+  margin-top: 20px;
+}
+
+.file-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.action-buttons {
+  margin-top: 20px;
+}
+
+.action-buttons button {
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+.action-buttons button:hover {
+  background-color: #ddd;
+}

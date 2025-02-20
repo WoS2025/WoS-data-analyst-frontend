@@ -1,0 +1,89 @@
+.file-list-wrapper {
+  position: fixed;
+  top: 18%; /* 调整为 header 底下 */
+  right: 20px;
+  z-index: 1000;
+}
+
+.file-list-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #333;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 24px;
+  transition: background-color 0.3s ease;
+}
+
+.file-list-icon:hover {
+  background-color: #555;
+}
+
+.file-list {
+  width: 250px;
+  max-height: 400px;
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-top: 10px; /* 适当调整 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.files {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #555;
+}
+
+.upload-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.upload-section button {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.upload-section button:hover {
+  background-color: #555;
+}
