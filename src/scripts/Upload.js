@@ -41,6 +41,8 @@ export default {
           };
 
           try {
+            // 會送出token 工作區 上傳的文件
+            // 將上傳的文件保存，並指定使用者與其所屬的工作區
             const response = await fetch(
               "https://wos-data-analysis-backend.onrender.com/api/file/upload",
               {

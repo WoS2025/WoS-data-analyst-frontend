@@ -52,6 +52,8 @@ export default {
       };
 
       try {
+        // 提交email 密碼
+        // "註冊"
         const response = await fetch(
           "https://wos-data-analysis-backend.onrender.com/api/auth/register",
           {
@@ -82,6 +84,8 @@ export default {
       };
 
       try {
+        // 提交email 密碼
+        // "登入"
         const response = await fetch(
           "https://wos-data-analysis-backend.onrender.com/api/auth/login",
           {
@@ -119,6 +123,8 @@ export default {
       };
 
       try {
+        // 會送出email
+        // "忘記密碼?"：把登入列email交給後端 供重設密碼
         const response = await fetch(
           "https://wos-data-analysis-backend.onrender.com/api/auth/forgotPassword",
           {

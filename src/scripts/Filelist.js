@@ -66,6 +66,8 @@ export default {
       };
 
       try {
+        // 會提交token 工作區 上傳的文件
+        // 上傳文件後將其儲存至資料庫
         const response = await fetch(
           "https://wos-data-analysis-backend.onrender.com/api/file/upload",
           {
@@ -103,6 +105,8 @@ export default {
       };
 
       try {
+        // 會提交token 工作區 選擇刪除的文件
+        // "刪除"：勾選好要刪除的文件以後，也通知後端將其移除於資料庫
         const response = await fetch(
           "https://wos-data-analysis-backend.onrender.com/api/file/deleteFiles",
           {

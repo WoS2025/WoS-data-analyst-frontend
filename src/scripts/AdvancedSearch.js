@@ -85,6 +85,8 @@ async function startAnalysis_keywordYear() {
     threshold: lower_limit.value,
   };
   try {
+    // 會提交token 工作區 文件列表 起訖時間 最少出現次數
+    // "關鍵字"：給使用者利用年份起訖進行搜尋，分析這段區間所出現的關鍵字及它們在此期間出現的總次數
     const response = await fetch(
       "https://wos-data-analysis-backend.onrender.com/api/keywordAnalysis/year",
       {
@@ -117,6 +119,8 @@ async function startAnalysis_singleKeyword() {
     keyword: single_key.value,
   };
   try {
+    // 會提交token 工作區 文件列表 user指定的關鍵字
+    // "關鍵字成長"：使用者可以查詢一個關鍵字，此API的用途是統計這個關鍵字於歷年成長的趨勢
     const response = await fetch(
       "https://wos-data-analysis-backend.onrender.com/api/keywordAnalysis/keyword",
       {
@@ -153,6 +157,8 @@ async function startAnalysis_yearAuthor() {
     threshold: lower_limit.value,
   };
   try {
+    // 會提交token 工作區 文件列表 user指定的作者名稱 
+    // "作者"：使用者輸入起訖年與作者名稱後，統計作者於此期間發表的數量
     const response = await fetch(
       "https://wos-data-analysis-backend.onrender.com/api/authorAnalysis/year",
       {
@@ -185,6 +191,8 @@ async function startAnalysis_author_cite() {
     threshold: lower_limit.value,
   };
   try {
+    // 會提交token 工作區 文件列表 user指定的最少引用次數
+    // "引用次數"：輸入最少次數後，列出>=該引用次數的標題和作者資訊
     const response = await fetch(
       "https://wos-data-analysis-backend.onrender.com/api/referenceCountAnalysis/generalInfo",
       {
@@ -221,6 +229,8 @@ async function startAnalysis_fieldYear() {
     threshold: lower_limit.value,
   };
   try {
+    // 會提交token 工作區 文件列表 起訖年 最少出現次數數值
+    // "研究領域"：統計在某區間裡面，各個研究領域分析的論文數目
     const response = await fetch(
       "https://wos-data-analysis-backend.onrender.com/api/fieldAnalysis/year",
       {
@@ -259,6 +269,8 @@ async function startAnalysis_singleField() {
   };
   try {
     const response = await fetch(
+      // 會提交token 工作區 文件列表 user指定的關鍵字(領域)
+      // "領域成長"：輸入關鍵字後，分析該領域每年的成長趨勢
       "https://wos-data-analysis-backend.onrender.com/api/fieldAnalysis/field",
       {
         method: "POST",

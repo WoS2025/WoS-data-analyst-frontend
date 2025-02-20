@@ -33,6 +33,7 @@ export default {
       const token = { token: this.getCookie("token") };
 
       try {
+        // 會送出token, 獲取這個user所持有的工作區
         const response = await fetch(
           "https://wos-data-analysis-backend.onrender.com/api/file/getWorkspace",
           {

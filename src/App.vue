@@ -81,6 +81,7 @@ export default {
       };
 
       try {
+        // 用以獲取指定工作區(workspaceName)裡面的文件列表
         const response = await fetch(
           "https://wos-data-analysis-backend.onrender.com/api/file/getFolder",
           {
