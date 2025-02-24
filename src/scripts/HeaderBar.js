@@ -4,11 +4,15 @@ export default {
     return {
       isLoginModalVisible: false,
       isRegisterModalVisible: false,
+      isResetPasswordModalVisible: false,
       isLoggedIn: false,
       loginEmail: "",
       loginPassword: "",
       registerEmail: "",
       registerPassword: "",
+
+      otp: "",
+      newPassword: "",
     };
   },
   mounted() {
@@ -24,9 +28,14 @@ export default {
     showRegisterModal() {
       this.isRegisterModalVisible = true;
     },
+    showResetPasswordModal(){
+      this.isResetPasswordModalVisible = true;
+      this.isLoginModalVisinle = false;
+    },
     hideModal() {
       this.isLoginModalVisible = false;
       this.isRegisterModalVisible = false;
+      this.isResetPasswordModalVisible = false;
     },
     validateEmail(email) {
       const re = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
@@ -112,21 +121,54 @@ export default {
         alert(`登入失敗: ${error.message}`);
       }
     },
-    async forgotPassword() {
-      if (!this.validateEmail(this.loginEmail)) {
-        alert("請輸入有效的電子郵件地址");
-        return;
-      }
+    // async forgotPassword() {
+    //   if (!this.validateEmail(this.loginEmail)) {
+    //     alert("請輸入有效的電子郵件地址");
+    //     return;
+    //   }
 
+    //   const userData = {
+    //     email: this.loginEmail,
+    //   };
+
+    //   try {
+    //     // 會送出email
+    //     // "忘記密碼?"：把登入列email交給後端 供重設密碼
+    //     const response = await fetch(
+    //       "https://wos-data-analysis-backend.onrender.com/api/auth/forgotPassword",
+    //       {
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(userData),
+    //       }
+    //     );
+
+    //     const result = await response.json();
+
+    //     if (response.ok) {
+    //       alert(`已寄送重設密碼的信件至該信箱: ${result.message}`);
+    //       this.hideModal();
+    //     } else {
+    //       throw new Error(result.message);
+    //     }
+    //   } catch (error) {
+    //     alert(`重設密碼信件寄出失敗: ${error.message}`);
+    //   }
+    // },
+
+    async resetPassword() {
       const userData = {
-        email: this.loginEmail,
+        otp: this.otp,
+        newPassword: this.password,
       };
 
       try {
-        // 會送出email
-        // "忘記密碼?"：把登入列email交給後端 供重設密碼
+        // 提交OTP與新密碼後點下"重設密碼"
+        // 要等後端的API
         const response = await fetch(
-          "https://wos-data-analysis-backend.onrender.com/api/auth/forgotPassword",
+          "",
           {
             method: "POST",
             headers: {
@@ -139,15 +181,18 @@ export default {
         const result = await response.json();
 
         if (response.ok) {
-          alert(`已寄送重設密碼的信件至該信箱: ${result.message}`);
+          alert(`密碼重設成功： ${result.message}`);
           this.hideModal();
-        } else {
+        }
+        else {
           throw new Error(result.message);
         }
+
       } catch (error) {
-        alert(`重設密碼信件寄出失敗: ${error.message}`);
+        alert(`密碼重設失敗：${error.message}`);
       }
     },
+
     logout() {
       this.isLoggedIn = false;
       this.deleteCookie("token");

@@ -19,7 +19,8 @@
         <input type="email" v-model="loginEmail" placeholder="電子郵件" />
         <input type="password" v-model="loginPassword" placeholder="密碼" />
         <button @click="login">登入</button>
-        <a href="#" @click="forgotPassword">忘記密碼？</a>
+        <!-- <a href="#" @click="forgotPassword">忘記密碼？</a> -->
+        <a href="#" @click="showResetPasswordModal">忘記密碼？</a>
       </div>
     </div>
 
@@ -33,6 +34,16 @@
       </div>
     </div>
   </div>
+
+  <!-- 重設密碼 Modal -->
+   <div v-if="isResetPasswordModalVisible" class="modal-overlay" @click="hideModal">
+      <div class="modal-content" @click.stop>
+        <h2>重設密碼</h2>
+        <input type="text" v-model="otp" placeholder="OTP" />
+        <input type="password" v-model="newPassword" placeholder="新密碼" />
+        <button @click="resetPassword">重設密碼</button>
+      </div>
+   </div>
 </template>
 
 <script>
@@ -41,3 +52,4 @@ export default HeaderBar;
 </script>
 
 <style scoped src="../styles/HeaderBar.css"></style>
+
