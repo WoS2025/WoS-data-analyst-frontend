@@ -1,7 +1,10 @@
 import ProjectItem from "../components/ProjectItem.vue";
+import { ref, watch } from "vue";
 
 
 const temp_id = ref('200270e4-2982-409f-8424-e3817969ca80');
+const temp_id_user = ref('fb0965e5-2288-48a7-be44-ffb6fe4e5b36');
+
 
 export default {
   components: {
@@ -36,11 +39,13 @@ export default {
       const token = { token: this.getCookie("token") };
 
       const currentWorkspace = temp_id; // 之後要放workspace的id
+      const currentUser = temp_id_user;
+
 
       try {
         // 會送出token, 獲取這個user所持有的工作區
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/workspaces",
+          "https://backend-refactor-nqz1.onrender.com/user/${currentUser}",
           {
             method: "GET",
             headers: {
@@ -51,7 +56,10 @@ export default {
         );
 
         if (response.ok) {
-          const result = await response.json();
+          const result = await request.json();
+          // 要用個for loop 把這位user的工作區一一列出來
+          // result 應該是一個 user 然後抓 user.workspace_ids 
+          
           this.projects = result.workspace.map((workspace) => ({
             name: workspace.name,
             files: workspace.count,

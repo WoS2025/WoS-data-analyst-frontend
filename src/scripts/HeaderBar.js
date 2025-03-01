@@ -1,3 +1,5 @@
+import { ref, watch } from "vue";
+
 const temp_id_user = ref('fb0965e5-2288-48a7-be44-ffb6fe4e5b36');
 const temp_username = ref('abc');
 
@@ -59,11 +61,12 @@ export default {
       }
 
       const currentUser = temp_id_user; // 之後要放user的id
+      
       const username = temp_username;
 
 
       const userData = {
-        username: this.registerUserName, // 目前還沒有這個變數 要之後加
+        username: username, // 目前還沒有這個變數 要之後加
         email: this.registerEmail,
         password: this.registerPassword,
       };
