@@ -1,5 +1,8 @@
 import ProjectItem from "../components/ProjectItem.vue";
 
+
+const temp_id = ref('200270e4-2982-409f-8424-e3817969ca80');
+
 export default {
   components: {
     ProjectItem,
@@ -32,12 +35,14 @@ export default {
     async fetchWorkspaces() {
       const token = { token: this.getCookie("token") };
 
+      const currentWorkspace = temp_id; // 之後要放workspace的id
+
       try {
         // 會送出token, 獲取這個user所持有的工作區
         const response = await fetch(
-          "https://wos-data-analysis-backend.onrender.com/api/file/getWorkspace",
+          "https://backend-refactor-nqz1.onrender.com/workspaces",
           {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
@@ -66,16 +71,22 @@ export default {
       this.showModal = false;
       this.newProjectName = "";
     },
-    async addProject() {
+    async addProject() {      
+
+      const currentWorkspace = temp_id; // 之後要放workspace的id
+
+
       if (this.newProjectName) {
         const data = {
           token: this.getCookie("token"),
           name: this.newProjectName,
         };
 
+
+
         try {
           const response = await fetch(
-            "https://wos-data-analysis-backend.onrender.com/api/file/newWorkspace",
+            "https://backend-refactor-nqz1.onrender.com/workspaces",
             {
               method: "POST",
               headers: {
@@ -109,11 +120,14 @@ export default {
         token: this.getCookie("token"),
       };
 
+
+
       try {
+        // 不確定要改成哪個API
         const response = await fetch(
-          "https://wos-data-analysis-backend.onrender.com/api/file/getFolder",
+          "https://backend-refactor-nqz1.onrender.com/workspaces",
           {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
@@ -149,11 +163,14 @@ export default {
         token: this.getCookie("token"),
       };
 
+      const currentWorkspace = temp_id; // 之後要放workspace的id
+
+
       try {
         const response = await fetch(
-          "https://wos-data-analysis-backend.onrender.com/api/file/deleteWorkspace",
+          "https://backend-refactor-nqz1.onrender.com/workspaces/%{currentWorkspace.value}",
           {
-            method: "POST",
+            method: "DELETE",
             headers: {
               "Content-Type": "application/json",
             },
