@@ -1,3 +1,7 @@
+const temp_id = ref('200270e4-2982-409f-8424-e3817969ca80');
+
+
+
 export default {
   name: "FileList",
   props: {
@@ -59,19 +63,21 @@ export default {
       }
     },
     async uploadFiles(filesData) {
+      const currentWorkspace = temp_id; // 之後要放workspace的id
       const data = {
-        token: this.getCookie("token"),
-        workspace: this.project.name,
+        // 之後filesData要加密為base64
         files: filesData,
       };
 
       try {
         // 會提交token 工作區 上傳的文件
         // 上傳文件後將其儲存至資料庫
+
+        
         const response = await fetch(
-          "https://wos-data-analysis-backend.onrender.com/api/file/upload",
+          "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/files",
           {
-            method: "POST",
+            method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
@@ -98,9 +104,10 @@ export default {
       this.selectedFiles = [];
     },
     async confirmDelete() {
+      const currentWorkspace = temp_id; // 之後要放workspace的id
+      const fileData = "abc"; // 之後改為刪除指定的檔案
+
       const data = {
-        token: this.getCookie("token"),
-        workspace: this.project.name,
         files: this.selectedFiles,
       };
 
@@ -108,9 +115,9 @@ export default {
         // 會提交token 工作區 選擇刪除的文件
         // "刪除"：勾選好要刪除的文件以後，也通知後端將其移除於資料庫
         const response = await fetch(
-          "https://wos-data-analysis-backend.onrender.com/api/file/deleteFiles",
+          "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/files/${fileData.name}",
           {
-            method: "POST",
+            method: "DELETE",
             headers: {
               "Content-Type": "application/json",
             },
