@@ -1,3 +1,5 @@
+const temp_id = ref('200270e4-2982-409f-8424-e3817969ca80');
+
 export default {
   props: {
     project: {
@@ -34,19 +36,21 @@ export default {
     async convertFiles() {
       if (this.files && this.files.length > 0) {
         if (this.filesData && this.filesData.length === this.files.length) {
+          
+          const currentWorkspace = temp_id; // 之後要放workspace的id
           const data = {
-            token: this.getCookie("token"),
-            workspace: this.project.name,
-            files: this.filesData,
+            // 之後filesData要加密為base64
+            files: filesData,
           };
+    
 
           try {
             // 會送出token 工作區 上傳的文件
             // 將上傳的文件保存，並指定使用者與其所屬的工作區
             const response = await fetch(
-              "https://wos-data-analysis-backend.onrender.com/api/file/upload",
+              "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/files/${fileData.name}",
               {
-                method: "POST",
+                method: "PUT",
                 headers: {
                   "Content-Type": "application/json",
                 },

@@ -1,3 +1,6 @@
+const temp_id_user = ref('fb0965e5-2288-48a7-be44-ffb6fe4e5b36');
+const temp_username = ref('abc');
+
 export default {
   name: "HeaderBar",
   data() {
@@ -28,7 +31,7 @@ export default {
     showRegisterModal() {
       this.isRegisterModalVisible = true;
     },
-    showResetPasswordModal(){
+    showResetPasswordModal() {
       this.isResetPasswordModalVisible = true;
       this.isLoginModalVisinle = false;
     },
@@ -55,7 +58,12 @@ export default {
         return;
       }
 
+      const currentUser = temp_id_user; // 之後要放user的id
+      const username = temp_username;
+
+
       const userData = {
+        username: this.registerUserName, // 目前還沒有這個變數 要之後加
         email: this.registerEmail,
         password: this.registerPassword,
       };
@@ -64,7 +72,7 @@ export default {
         // 提交email 密碼
         // "註冊"
         const response = await fetch(
-          "https://wos-data-analysis-backend.onrender.com/api/auth/register",
+          "https://backend-refactor-nqz1.onrender.com/register",
           {
             method: "POST",
             headers: {
@@ -87,7 +95,11 @@ export default {
       }
     },
     async login() {
+      const currentUser = temp_id_user;
+      const username = temp_username;
+
       const userData = {
+        username: this.loginUsername, // 還沒有這個變數 要之後加
         email: this.loginEmail,
         password: this.loginPassword,
       };
@@ -96,7 +108,7 @@ export default {
         // 提交email 密碼
         // "登入"
         const response = await fetch(
-          "https://wos-data-analysis-backend.onrender.com/api/auth/login",
+          "https://backend-refactor-nqz1.onrender.com/login",
           {
             method: "POST",
             headers: {
@@ -159,16 +171,16 @@ export default {
     // },
 
     async resetPassword() {
-      const userData = {
-        otp: this.otp,
-        newPassword: this.password,
-      };
+      // const userData = {
+      //   otp: this.otp,
+      //   newPassword: this.password,
+      // };
 
       try {
         // 提交OTP與新密碼後點下"重設密碼"
         // 要等後端的API
         const response = await fetch(
-          "",
+          "https://backend-refactor-nqz1.onrender.com//forgotPassword",
           {
             method: "POST",
             headers: {
