@@ -39,32 +39,30 @@ export default {
       const token = { token: this.getCookie("token") };
 
       const currentWorkspace = temp_id; // 之後要放workspace的id
-      const currentUser = temp_id_user;
-
+      const currentUser = temp_id_user._value;
 
       try {
         // 會送出token, 獲取這個user所持有的工作區
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/user/${currentUser}",
+          `https://backend-refactor-nqz1.onrender.com/user/${currentUser}`, //建議包url都單引號 by 智涵
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // 將 token 放在 Authorization header 中
             },
-            body: JSON.stringify(token),
           }
         );
 
         if (response.ok) {
-          const result = await request.json();
+          const result = await response.json();
           // 要用個for loop 把這位user的工作區一一列出來
-          // result 應該是一個 user 然後抓 user.workspace_ids 
-          
-          this.projects = result.workspace.map((workspace) => ({
+          // result 應該是一個 user 然後抓 user.workspace_ids
+          this.projects = result.user.workspace_ids.map((workspace) => ({
             name: workspace.name,
             files: workspace.count,
           }));
-          console.log(this.projects);
+          console.log("this.project", this.projects);
         } else {
           console.error("獲取工作區失敗", response.statusText);
         }
