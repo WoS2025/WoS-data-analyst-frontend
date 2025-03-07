@@ -5,7 +5,7 @@
     @mouseleave="hideDeleteButton"
   >
     <h3>{{ project.name }}</h3>
-    <p>檔案數量: {{ project.files }}</p>
+    <p>檔案數量: {{ project.files.length }}</p>
     <button v-if="showDelete" @click="deleteProject" class="delete-button">
       X
     </button>

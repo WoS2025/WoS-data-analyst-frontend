@@ -1,10 +1,8 @@
 import ProjectItem from "../components/ProjectItem.vue";
 import { ref, watch } from "vue";
 
-
-const temp_id = ref('200270e4-2982-409f-8424-e3817969ca80');
-const temp_id_user = ref('fb0965e5-2288-48a7-be44-ffb6fe4e5b36');
-
+const temp_id = ref("200270e4-2982-409f-8424-e3817969ca80");
+const temp_id_user = ref("79befeda-ee2b-441e-baeb-f0129c7bd337");
 
 export default {
   components: {
@@ -35,6 +33,7 @@ export default {
       }
       return null;
     },
+
     async fetchWorkspaces() {
       const token = { token: this.getCookie("token") };
 
@@ -49,19 +48,46 @@ export default {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // 將 token 放在 Authorization header 中
+              Authorization: `Bearer ${token}`,
             },
           }
         );
+        console.log(response, "!!");
 
         if (response.ok) {
           const result = await response.json();
+          const workspaceIds = result.user.workspace_ids;
+
           // 要用個for loop 把這位user的工作區一一列出來
           // result 應該是一個 user 然後抓 user.workspace_ids
-          this.projects = result.user.workspace_ids.map((workspace) => ({
-            name: workspace.name,
-            files: workspace.count,
-          }));
+          const workspaceDetails = await Promise.all(
+            workspaceIds.map(async (workspaceId) => {
+              const workspaceResponse = await fetch(
+                `https://backend-refactor-nqz1.onrender.com/workspaces/${workspaceId}`,
+                {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+
+              if (workspaceResponse.ok) {
+                return await workspaceResponse.json();
+              } else {
+                console.error(
+                  `獲取工作區 ${workspaceId} 詳細資料失敗`,
+                  workspaceResponse.statusText
+                );
+                return null;
+              }
+            })
+          );
+
+          this.projects = workspaceDetails.filter(
+            (workspace) => workspace !== null
+          );
           console.log("this.project", this.projects);
         } else {
           console.error("獲取工作區失敗", response.statusText);
@@ -77,18 +103,63 @@ export default {
       this.showModal = false;
       this.newProjectName = "";
     },
-    async addProject() {      
+    async findLastWorkspace() {
+      console.log("addWorkspaceToUser");
+      try {
+        const response = await fetch(
+          "https://backend-refactor-nqz1.onrender.com/workspaces",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${this.getCookie("token")}`,
+            },
+          }
+        );
 
-      const currentWorkspace = temp_id; // 之後要放workspace的id
+        if (response.ok) {
+          const result = await response.json();
+          console.log("所有工作區", result);
 
+          // 確保 result 是一個陣列，並且有至少一個工作區
+          if (Array.isArray(result) && result.length > 0) {
+            const lastWorkspace = result[result.length - 1].workspace_id;
 
+            console.log("最後一個工作區_id", lastWorkspace);
+            // 將剛加入的工作區的 ID 添加到用戶的 workspace_ids 中
+            const currentUser = temp_id_user.value;
+
+            const userResponse = await fetch(
+              `https://backend-refactor-nqz1.onrender.com/user/${currentUser}/workspace/${lastWorkspace}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (userResponse.ok) {
+              const userResult = await userResponse.json();
+            } else {
+              console.error("獲取用戶資料失敗", userResponse.statusText);
+            }
+          } else {
+            console.error("沒有找到任何工作區");
+          }
+        } else {
+          console.error("獲取工作區失敗", response.statusText);
+        }
+      } catch (error) {
+        console.error("請求失敗", error);
+      }
+    }, // 這裡是新增工作區的函數，找到最後一個工作區，然後把它加到用戶的工作區列表裡
+    async addProject() {
       if (this.newProjectName) {
         const data = {
           token: this.getCookie("token"),
           name: this.newProjectName,
         };
-
-
 
         try {
           const response = await fetch(
@@ -101,12 +172,14 @@ export default {
               body: JSON.stringify(data),
             }
           );
+          console.log("response", response);
 
           if (response.ok) {
             const result = await response.json();
             alert("工作區新增成功");
             this.closeAddProjectModal();
-            await this.fetchWorkspaces(); // 调用fetchWorkspaces以刷新工作区列表
+            await this.findLastWorkspace();
+            await this.fetchWorkspaces();
           } else {
             console.error("新增工作區失敗", response.statusText);
             alert("新增工作區失敗");
@@ -126,8 +199,6 @@ export default {
         token: this.getCookie("token"),
       };
 
-
-
       try {
         // 不確定要改成哪個API
         const response = await fetch(
@@ -137,13 +208,12 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
           }
         );
 
         if (response.ok) {
           const result = await response.json();
-          project.files = result.files.length; // 更新项目的文件数量
+          project.files = result.files.length;
           this.$emit("update-files", result.files);
           console.log("工作區底下的檔案:", result.files);
         } else {
@@ -168,9 +238,6 @@ export default {
         workspace: this.projectToDelete,
         token: this.getCookie("token"),
       };
-
-      const currentWorkspace = temp_id; // 之後要放workspace的id
-
 
       try {
         const response = await fetch(
