@@ -1,8 +1,8 @@
 import ProjectItem from "../components/ProjectItem.vue";
 import { ref, watch } from "vue";
 
-const temp_id = ref("200270e4-2982-409f-8424-e3817969ca80");
-const temp_id_user = ref("79befeda-ee2b-441e-baeb-f0129c7bd337");
+const temp_id = ref(""); //自己放自己要測試的workspace_id
+const temp_id_user = ref(""); //自己放自己要測試的user_id
 
 export default {
   components: {
