@@ -6,6 +6,7 @@
     </div>
     <div class="auth-buttons">
       <button v-if="!isLoggedIn" @click="showLoginModal">登入</button>
+      <button v-if="!isLoggedIn" @click="goToLogin">登入</button>
       <button v-if="!isLoggedIn" class="sign" @click="showRegisterModal">
         註冊
       </button>
