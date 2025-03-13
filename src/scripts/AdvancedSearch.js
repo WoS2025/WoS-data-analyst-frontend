@@ -157,7 +157,7 @@ async function startAnalysis_yearAuthor() {
     threshold: lower_limit.value,
   };
   try {
-    // 會提交token 工作區 文件列表 user指定的作者名稱 
+    // 會提交token 工作區 文件列表 user指定的作者名稱
     // "作者"：使用者輸入起訖年與作者名稱後，統計作者於此期間發表的數量
     const response = await fetch(
       "https://wos-data-analysis-backend.onrender.com/api/authorAnalysis/year",
