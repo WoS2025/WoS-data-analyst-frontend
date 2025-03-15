@@ -1,10 +1,5 @@
 <template>
-    <header>
-      <h1>登入頁面</h1>
-      <div class="header-buttons">
-        <button @click="goToShop">🛒 返回商店</button>
-      </div>
-    </header>
+    
     <div class="container" :class="{ 'sign-up-mode': isSignUp }">
       <div class="forms-container">
         <div class="signin-signup">
@@ -13,11 +8,11 @@
             <h2 class="title">Sign in</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" v-model="loginEmail" placeholder="Username" />
+              <input type="email" v-model="loginEmail" placeholder="電子郵件" />
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" v-model="loginPassword" placeholder="Password" />
+              <input type="password" v-model="loginPassword" placeholder="密碼" />
             </div>
             <input type="submit" value="Login" class="btn solid" />
             <p class="social-text">Or Sign in with social platforms</p>
@@ -32,10 +27,6 @@
           <!-- Sign-up Form -->
           <form @submit.prevent="register" class="sign-up-form">
             <h2 class="title">Sign up</h2>
-            <div class="input-field">
-              <i class="fas fa-user"></i>
-              <input type="text" v-model="registerUsername" placeholder="Username" />
-            </div>
             <div class="input-field">
               <i class="fas fa-envelope"></i>
               <input type="email" v-model="registerEmail" placeholder="Email" />
@@ -63,6 +54,7 @@
             <p>Sign up and discover great opportunities!</p>
             <button class="btn transparent" @click="toggleSignUp">Sign up</button>
           </div>
+          <img src="/src/assets/register.svg" class="image" alt="" />
         </div>
         <div class="panel right-panel">
           <div class="content">
@@ -70,42 +62,15 @@
             <p>To stay connected, please login with your personal info.</p>
             <button class="btn transparent" @click="toggleSignUp">Sign in</button>
           </div>
+          <img src="/src/assets/log.svg" class="image" alt="" />
         </div>
       </div>
     </div>
   </template>
   
   <script>
-  export default {
-    data() {
-      return {
-        isSignUp: false,
-        loginEmail: "",
-        loginPassword: "",
-        registerUsername: "",
-        registerEmail: "",
-        registerPassword: "",
-      };
-    },
-    methods: {
-      toggleSignUp() {
-        this.isSignUp = !this.isSignUp;
-      },
-      goToShop() {
-        window.location.href = "index.html";
-      },
-      login() {
-        alert(`Logging in with ${this.loginEmail}`);
-      },
-      register() {
-        alert(`Registering with ${this.registerEmail}`);
-      },
-    },
-  };
+  import login from "../views/login.js";
+  export default login;
   </script>
   
-  <style scoped>
-  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
-  @import "../styles/HeaderBar.css";
-  </style>
-  
+  <style scoped src="../views/login.css"></style>
