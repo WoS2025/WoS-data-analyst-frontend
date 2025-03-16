@@ -5,33 +5,9 @@
       Data Analysis
     </div>
     <div class="auth-buttons">
-      <button v-if="!isLoggedIn" @click="showLoginModal">登入</button>
-      <button v-if="!isLoggedIn" @click="goToLogin">登入</button>
-      <button v-if="!isLoggedIn" class="sign" @click="showRegisterModal">
-        註冊
-      </button>
+      <button v-if="!isLoggedIn" @click="goToLogin"><svg xmlns="http://www.w3.org/2000/svg" height="2em"viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#ff66a8" d="M399 384.2C376.9 345.8 335.4 320 288 320l-64 0c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"/></svg></button>
+      
       <button v-if="isLoggedIn" @click="logout">登出</button>
-    </div>
-
-    <!-- 登入與忘記密碼 Modal -->
-    <div v-if="isLoginModalVisible" class="modal-overlay" @click="hideModal">
-      <div class="modal-content" @click.stop>
-        <h2>登入</h2>
-        <input type="email" v-model="loginEmail" placeholder="電子郵件" />
-        <input type="password" v-model="loginPassword" placeholder="密碼" />
-        <button @click="login">登入</button>
-        <a href="#" @click="forgotPassword">忘記密碼？</a>
-      </div>
-    </div>
-
-    <!-- 註冊 Modal -->
-    <div v-if="isRegisterModalVisible" class="modal-overlay" @click="hideModal">
-      <div class="modal-content" @click.stop>
-        <h2>註冊</h2>
-        <input type="email" v-model="registerEmail" placeholder="電子郵件" />
-        <input type="password" v-model="registerPassword" placeholder="密碼" />
-        <button @click="register">註冊</button>
-      </div>
     </div>
   </div>
 </template>

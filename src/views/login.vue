@@ -15,6 +15,7 @@
               <input type="password" v-model="loginPassword" placeholder="密碼" />
             </div>
             <input type="submit" value="Login" class="btn solid" />
+            <a href="#" @click="forgotPassword">忘記密碼？</a>
             <p class="social-text">Or Sign in with social platforms</p>
             <div class="social-media">
               <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
