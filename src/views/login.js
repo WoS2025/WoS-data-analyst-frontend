@@ -111,7 +111,7 @@ export default {
             this.isLoggedIn = true;
             this.setCookie("token", result.token, 7);
             this.hideModal();
-            window.location.reload(); // 重新整理頁面
+            this.$router.push('/'); // 重新整理頁面
           } else {
             throw new Error(result.message);
           }
