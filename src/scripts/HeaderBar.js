@@ -1,7 +1,7 @@
 import { ref, watch } from "vue";
 
-const temp_id_user = ref('fb0965e5-2288-48a7-be44-ffb6fe4e5b36');
-const temp_username = ref('abc');
+const temp_id_user = ref("fb0965e5-2288-48a7-be44-ffb6fe4e5b36");
+const temp_username = ref("abc");
 
 export default {
   name: "HeaderBar",
@@ -61,9 +61,8 @@ export default {
       }
 
       const currentUser = temp_id_user; // 之後要放user的id
-      
-      const username = temp_username;
 
+      const username = temp_username;
 
       const userData = {
         username: username, // 目前還沒有這個變數 要之後加
@@ -75,7 +74,7 @@ export default {
         // 提交email 密碼
         // "註冊"
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/register",
+          "https://backend-refactor-nqz1.onrender.com/user/register",
           {
             method: "POST",
             headers: {
@@ -111,7 +110,7 @@ export default {
         // 提交email 密碼
         // "登入"
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/login",
+          "https://backend-refactor-nqz1.onrender.com/user/login",
           {
             method: "POST",
             headers: {
@@ -198,11 +197,9 @@ export default {
         if (response.ok) {
           alert(`密碼重設成功： ${result.message}`);
           this.hideModal();
-        }
-        else {
+        } else {
           throw new Error(result.message);
         }
-
       } catch (error) {
         alert(`密碼重設失敗：${error.message}`);
       }
