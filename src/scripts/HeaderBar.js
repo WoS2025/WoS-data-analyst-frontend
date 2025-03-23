@@ -121,6 +121,9 @@ export default {
         );
 
         const result = await response.json();
+        //console.log(result);
+        localStorage.setItem("jwt", result.jwt);
+        //console.log(result.jwt, "!!!");
 
         if (response.ok) {
           alert(`登入成功: ${result.message}`);

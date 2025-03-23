@@ -4,30 +4,48 @@
       <div class="dropdown">
         <button class="dropbtn" @click="toggleDropdown">選擇分析功能</button>
         <div class="dropdown-content" v-show="dropdownOpen">
-          <a @click="
-            hidden_btn();
-          show_search(1);
-          ">關鍵字</a>
-          <a @click="
-            hidden_btn();
-          show_search(3);
-          ">關鍵字成長</a>
-          <a @click="
-            hidden_btn();
-          show_search(4);
-          ">作者</a>
-          <a @click="
-            hidden_btn();
-          show_search(5);
-          ">引用次數</a>
-          <a @click="
-            hidden_btn();
-          show_search(6);
-          ">研究領域</a>
-          <a @click="
-            hidden_btn();
-          show_search(8);
-          ">領域成長</a>
+          <a
+            @click="
+              hidden_btn();
+              show_search(1);
+            "
+            >關鍵字</a
+          >
+          <a
+            @click="
+              hidden_btn();
+              show_search(3);
+            "
+            >關鍵字成長</a
+          >
+          <a
+            @click="
+              hidden_btn();
+              show_search(4);
+            "
+            >作者</a
+          >
+          <a
+            @click="
+              hidden_btn();
+              show_search(5);
+            "
+            >引用次數</a
+          >
+          <a
+            @click="
+              hidden_btn();
+              show_search(6);
+            "
+            >研究領域</a
+          >
+          <a
+            @click="
+              hidden_btn();
+              show_search(8);
+            "
+            >領域成長</a
+          >
         </div>
       </div>
       <!-- <button class="btn-option" @click="hidden_btn()" v-if="!btn_show">
@@ -51,7 +69,11 @@
             <input type="number" v-model="lower_limit" class="small-input" />
           </label>
           <div>
-            <input type="button" value="開始分析" @click="startAnalysis_keywordYear()" />
+            <input
+              type="button"
+              value="開始分析"
+              @click="startAnalysis_keywordYear()"
+            />
           </div>
         </div>
 
@@ -60,10 +82,19 @@
           <p>根據關鍵字做查詢，可觀察該關鍵字每年的成長趨勢</p>
           <label>
             輸入關鍵字
-            <input type="text" v-model="single_key" @keyup.enter="startAnalysis_singleKeyword()" class="small-input" />
+            <input
+              type="text"
+              v-model="single_key"
+              @keyup.enter="startAnalysis_singleKeyword()"
+              class="small-input"
+            />
           </label>
           <div>
-            <input type="button" value="開始分析" @click="startAnalysis_singleKeyword()" />
+            <input
+              type="button"
+              value="開始分析"
+              @click="startAnalysis_singleKeyword()"
+            />
           </div>
         </div>
 
@@ -83,7 +114,11 @@
             <input type="number" v-model="lower_limit" class="small-input" />
           </label>
           <div>
-            <input type="button" value="開始分析" @click="startAnalysis_yearAuthor()" />
+            <input
+              type="button"
+              value="開始分析"
+              @click="startAnalysis_yearAuthor()"
+            />
           </div>
         </div>
         <!-- 根據引用次數做分析（一併提供標題和作者資訊） -->
@@ -94,7 +129,11 @@
             <input type="number" v-model="lower_limit" class="small-input" />
           </label>
           <div>
-            <input type="button" value="開始分析" @click="startAnalysis_author_cite()" />
+            <input
+              type="button"
+              value="開始分析"
+              @click="startAnalysis_author_cite()"
+            />
           </div>
         </div>
 
@@ -114,7 +153,11 @@
             <input type="number" v-model="lower_limit" class="small-input" />
           </label>
           <div>
-            <input type="button" value="開始分析" @click="startAnalysis_fieldYear()" />
+            <input
+              type="button"
+              value="開始分析"
+              @click="startAnalysis_fieldYear()"
+            />
           </div>
         </div>
         <!-- 單一領域成長趨勢 -->
@@ -122,10 +165,19 @@
           <p>根據研究領域做查詢，可觀察該研究領域每年的成長趨勢</p>
           <label>
             輸入關鍵字
-            <input type="text" v-model="single_field" @keyup.enter="startAnalysis_singleField()" class="small-input" />
+            <input
+              type="text"
+              v-model="single_field"
+              @keyup.enter="startAnalysis_singleField()"
+              class="small-input"
+            />
           </label>
           <div>
-            <input type="button" value="開始分析" @click="startAnalysis_singleField()" />
+            <input
+              type="button"
+              value="開始分析"
+              @click="startAnalysis_singleField()"
+            />
           </div>
         </div>
       </div>
@@ -156,7 +208,7 @@ const showChart = ref(false);
 const waitComp = ref(false);
 const subtitle = ref("");
 
-const temp_id = ref('200270e4-2982-409f-8424-e3817969ca80');
+const temp_id = ref("200270e4-2982-409f-8424-e3817969ca80");
 
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value;
@@ -218,7 +270,7 @@ const getCookie = (name) => {
 //功能開始
 //關鍵字，年份區間
 async function startAnalysis_keywordYear() {
-  showChart.value = false; //預處理，避免上一個圖表還在  
+  showChart.value = false; //預處理，避免上一個圖表還在
 
   const currentWorkspace = temp_id; // 之後要放workspace的id
   const refresh = get_results(1);
@@ -231,7 +283,7 @@ async function startAnalysis_keywordYear() {
     // 會提交工作區 文件列表 起訖時間 最少出現次數
     // "關鍵字"：給使用者利用年份起訖進行搜尋，分析這段區間所出現的關鍵字及它們在此期間出現的總次數
     const response = await fetch(
-      "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/keyword/year",
+      `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/keyword/year`,
       {
         method: "POST",
         headers: {
@@ -263,7 +315,7 @@ async function startAnalysis_singleKeyword() {
     // 會提交工作區 文件列表 user指定的關鍵字
     // "關鍵字成長"：使用者可以查詢一個關鍵字，此API的用途是統計這個關鍵字於歷年成長的趨勢
     const response = await fetch(
-      "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analasis/keyword",
+      `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/keyword`,
       {
         method: "POST",
         headers: {
@@ -296,10 +348,10 @@ async function startAnalysis_yearAuthor() {
     threshold: lower_limit.value,
   };
   try {
-    // 會提交工作區 文件列表 user指定的作者名稱 
+    // 會提交工作區 文件列表 user指定的作者名稱
     // "作者"：使用者輸入起訖年與作者名稱後，統計作者於此期間發表的數量
     const response = await fetch(
-      "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analasis/author/year",
+      `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/author/year`,
       {
         method: "POST",
         headers: {
@@ -331,7 +383,7 @@ async function startAnalysis_author_cite() {
     // 會提交工作區 文件列表 user指定的最少引用次數
     // "引用次數"：輸入最少次數後，列出>=該引用次數的標題和作者資訊
     const response = await fetch(
-      "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analasis/reference",
+      `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/reference`,
       {
         method: "POST",
         headers: {
@@ -367,7 +419,7 @@ async function startAnalysis_fieldYear() {
     // 會提交工作區 文件列表 起訖年 最少出現次數數值
     // "研究領域"：統計在某區間裡面，各個研究領域分析的論文數目
     const response = await fetch(
-      "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/field/year",
+      `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/field/year`,
       {
         method: "POST",
         headers: {
@@ -404,7 +456,7 @@ async function startAnalysis_singleField() {
     const response = await fetch(
       // 會提交工作區 文件列表 user指定的關鍵字
       // "領域成長"：輸入關鍵字後，分析該領域每年的成長趨勢
-      "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analasis/field",
+      `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/field`,
       {
         method: "POST",
         headers: {
@@ -455,13 +507,12 @@ async function get_results(max_r) {
   while (attempt < maxRetries) {
     try {
       const response = await fetch(
-        "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/result",
+        `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/result`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-         
         }
       );
 

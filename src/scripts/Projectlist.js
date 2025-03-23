@@ -36,7 +36,6 @@ export default {
 
     async fetchWorkspaces() {
       const token = { token: this.getCookie("token") };
-
       const currentWorkspace = temp_id; // 之後要放workspace的id
       const currentUser = temp_id_user._value;
 
@@ -52,8 +51,6 @@ export default {
             },
           }
         );
-        console.log(response, "!!");
-
         if (response.ok) {
           const result = await response.json();
           const workspaceIds = result.user.workspace_ids;
