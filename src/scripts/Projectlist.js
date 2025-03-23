@@ -35,12 +35,33 @@ export default {
     },
 
     async fetchWorkspaces() {
-      const token = { token: this.getCookie("token") };
+      const token = localStorage.getItem("jwt");
       const currentWorkspace = temp_id; // 之後要放workspace的id
-      const currentUser = temp_id_user._value;
-
       try {
         // 會送出token, 獲取這個user所持有的工作區
+
+        const email = ""; //// @垃圾船 你需要去找剛登入的這個用戶的email，丟給這個email變數裡面，加油！ 應該可以去HeaderBar那邊找 (應該)
+        const aaa = await fetch(
+          `https://backend-refactor-nqz1.onrender.com/user/email/${email}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            return data.user;
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+        const currentUser = aaa.user_id;
+
         const response = await fetch(
           `https://backend-refactor-nqz1.onrender.com/user/${currentUser}`, //建議包url都單引號 by 智涵
           {
@@ -51,6 +72,7 @@ export default {
             },
           }
         );
+
         if (response.ok) {
           const result = await response.json();
           const workspaceIds = result.user.workspace_ids;
