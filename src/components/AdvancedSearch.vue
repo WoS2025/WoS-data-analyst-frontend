@@ -753,9 +753,3 @@ async function drawChart_singleField() {
 </script>
 
 <style scoped src="../styles/AdvancedSearch.css"></style>
-<!-- . -->
-
-<!--  
-import AdvancedSearch from "../scripts/AdvancedSearch.js";
-export default AdvancedSearch;
--->
