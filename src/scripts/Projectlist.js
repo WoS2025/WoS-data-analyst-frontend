@@ -40,8 +40,9 @@ export default {
       try {
         // 會送出token, 獲取這個user所持有的工作區
 
-        const email = ""; //// @垃圾船 你需要去找剛登入的這個用戶的email，丟給這個email變數裡面，加油！ 應該可以去HeaderBar那邊找 (應該)
-        const aaa = await fetch(
+        const email = localStorage.getItem("userEmail"); //// 感謝!!
+        // console.log(email);
+        const emailResponse = await fetch(
           `https://backend-refactor-nqz1.onrender.com/user/email/${email}`,
           {
             method: "GET",
@@ -60,7 +61,9 @@ export default {
           .catch(function (err) {
             console.log(err);
           });
-        const currentUser = aaa.user_id;
+        const currentUser = emailResponse.user_id;
+        
+        // console.log("This is currentUser" + currentUser);
 
         const response = await fetch(
           `https://backend-refactor-nqz1.onrender.com/user/${currentUser}`, //建議包url都單引號 by 智涵
@@ -76,6 +79,11 @@ export default {
         if (response.ok) {
           const result = await response.json();
           const workspaceIds = result.user.workspace_ids;
+
+          // console.log("This is result:" + result);
+
+
+          // console.log("This is workspaceIds:" + workspaceIds);
 
           // 要用個for loop 把這位user的工作區一一列出來
           // result 應該是一個 user 然後抓 user.workspace_ids

@@ -123,6 +123,7 @@ export default {
         const result = await response.json();
         //console.log(result);
         localStorage.setItem("jwt", result.jwt);
+        localStorage.setItem("userEmail", this.loginEmail);
         //console.log(result.jwt, "!!!");
 
         if (response.ok) {
