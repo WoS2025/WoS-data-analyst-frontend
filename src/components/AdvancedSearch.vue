@@ -9,14 +9,14 @@
               hidden_btn();
               show_search(1);
             "
-            >關鍵字</a
+            >關鍵字/年份區間</a
           >
           <a
             @click="
               hidden_btn();
               show_search(3);
             "
-            >關鍵字成長</a
+            >關鍵字</a
           >
           <a
             @click="
@@ -45,6 +45,27 @@
               show_search(8);
             "
             >領域成長</a
+          >
+          <a
+            @click="
+              hidden_btn();
+              show_search(9);
+            "
+            >學術機構</a
+          >
+          <a
+            @click="
+              hidden_btn();
+              show_search(10);
+            "
+            >學術機構/年份區間</a
+          >
+          <a
+            @click="
+              hidden_btn();
+              show_search(11);
+            "
+            >國家/年份區間</a
           >
         </div>
       </div>
@@ -180,6 +201,72 @@
             />
           </div>
         </div>
+        <!-- 學術機構 -->
+        <div class="single-field search-item" v-if="search_block === 9">
+          <p>學術機構</p>
+          <label>
+            輸入關鍵字
+            <input
+              type="text"
+              v-model="single_field"
+              @keyup.enter="startAnalysis_institution()"
+              class="small-input"
+            />
+          </label>
+          <div>
+            <input
+              type="button"
+              value="開始分析"
+              @click="startAnalysis_institution()"
+            />
+          </div>
+        </div>
+        <!-- 學術機構/年份區間 -->
+        <div class="single-field search-item" v-if="search_block === 10">
+          <p>學術機構/年份區間</p>
+          <label>
+            開始年:
+            <input type="number" v-model="startYear" class="small-input" />
+          </label>
+          <label>
+            結束年:
+            <input type="number" v-model="endYear" class="small-input" />
+          </label>
+          <label>
+            最少出現次數(下限):
+            <input type="number" v-model="lower_limit" class="small-input" />
+          </label>
+          <div>
+            <input
+              type="button"
+              value="開始分析"
+              @click="startAnalysis_institutionYear()"
+            />
+          </div>
+        </div>
+        <!-- 國家/年份區間 -->
+        <div class="single-field search-item" v-if="search_block === 11">
+          <p>國家/年份區間</p>
+          <label>
+            開始年:
+            <input type="number" v-model="startYear" class="small-input" />
+          </label>
+          <label>
+            結束年:
+            <input type="number" v-model="endYear" class="small-input" />
+          </label>
+          <label>
+            最少出現次數(下限):
+            <input type="number" v-model="lower_limit" class="small-input" />
+          </label>
+          <div>
+            <input
+              type="button"
+              value="開始分析"
+              @click="startAnalysis_countryYear()"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -265,7 +352,6 @@ const getCookie = (name) => {
   }
   return null;
 };
-// console.log(getCookie("token"))
 
 //功能開始
 //關鍵字，年份區間
@@ -297,7 +383,7 @@ async function startAnalysis_keywordYear() {
       throw new Error("API request failed");
     }
     const responseData = await response.json();
-    // console.log(responseData);
+    console.log(responseData);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -477,6 +563,112 @@ async function startAnalysis_singleField() {
   }
 
   drawChart_singleField();
+}
+
+// 學術機構
+async function startAnalysis_institution() {
+  //因為後端原因，暫時無法實作
+  showChart.value = false; //預處理，避免上一個圖表還在
+  const refresh = get_results(1);
+  const currentWorkspace = temp_id; // 之後要放workspace的id
+  const requestData = {
+    field: single_field.value,
+  };
+  try {
+    const response = await fetch(
+      `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/institution`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("API request failed");
+    }
+
+    const responseData = await response.json();
+    //console.log(responseData);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+
+  //drawChart_singleField();
+}
+
+// 學術機構/年份區間
+async function startAnalysis_institutionYear() {
+  showChart.value = false; //預處理，避免上一個圖表還在
+  const refresh = get_results(10);
+  const currentWorkspace = temp_id; // 之後要放workspace的id
+  const requestData = {
+    start: startYear.value,
+    end: endYear.value,
+    threshold: lower_limit.value,
+  };
+  try {
+    const response = await fetch(
+      `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/institution/year`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("API request failed");
+    }
+
+    const responseData = await response.json();
+    //console.log(responseData);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+
+  drawChart_institutionYear();
+}
+
+// 國家/年份區間
+async function startAnalysis_countryYear() {
+  //因為COR被擋，暫時無法實作
+  showChart.value = false; //預處理，避免上一個圖表還在
+  const refresh = get_results(1);
+  const currentWorkspace = temp_id; // 之後要放workspace的id
+  const requestData = {
+    start: startYear.value,
+    end: endYear.value,
+    threshold: lower_limit.value,
+  };
+  console.log(requestData);
+  try {
+    const response = await fetch(
+      `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/country/year`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("API request failed");
+    }
+
+    const responseData = await response.json();
+    console.log(responseData);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+
+  //drawChart_singleField();
 }
 
 //物件比較函式
@@ -714,6 +906,111 @@ async function drawChart_fieldYear() {
 }
 
 async function drawChart_singleField() {
+  const result = await get_results(10);
+  const topData = result.results.slice(0, 50);
+
+  google.charts.load("current", { packages: ["corechart"] });
+  google.charts.setOnLoadCallback(async () => {
+    const data = new google.visualization.DataTable();
+    data.addColumn("number", "Year");
+    data.addColumn("number", "Count");
+
+    const dataArray = topData.map((item) => [item.year, item.count]);
+    data.addRows(dataArray);
+
+    const options = {
+      title: "Field Analysis",
+      legend: { position: "none" },
+      hAxis: {
+        title: "Year",
+        format: "####", // Ensures the year is displayed without decimals
+        gridlines: {
+          count: data.getNumberOfRows() / 2, // Ensures gridlines match the number of data points
+        },
+      },
+      pointSize: 5,
+      vAxis: {
+        title: "Count",
+      },
+      height: "100%",
+      width: "100%",
+    };
+
+    const chart = new google.visualization.LineChart(
+      document.getElementById("chart")
+    );
+    chart.draw(data, options);
+  });
+}
+
+async function drawChart_institution() {
+  const result = await get_results(10);
+  const topData = result.results.slice(0, 50);
+
+  google.charts.load("current", { packages: ["corechart"] });
+  google.charts.setOnLoadCallback(async () => {
+    const data = new google.visualization.DataTable();
+    data.addColumn("number", "Year");
+    data.addColumn("number", "Count");
+
+    const dataArray = topData.map((item) => [item.year, item.count]);
+    data.addRows(dataArray);
+
+    const options = {
+      title: "Field Analysis",
+      legend: { position: "none" },
+      hAxis: {
+        title: "Year",
+        format: "####", // Ensures the year is displayed without decimals
+        gridlines: {
+          count: data.getNumberOfRows() / 2, // Ensures gridlines match the number of data points
+        },
+      },
+      pointSize: 5,
+      vAxis: {
+        title: "Count",
+      },
+      height: "100%",
+      width: "100%",
+    };
+
+    const chart = new google.visualization.LineChart(
+      document.getElementById("chart")
+    );
+    chart.draw(data, options);
+  });
+}
+
+async function drawChart_institutionYear() {
+  const result = await get_results(10);
+  const topData = result.results.slice(0, 50);
+
+  google.charts.load("current", { packages: ["corechart"] });
+  google.charts.setOnLoadCallback(async () => {
+    const data = new google.visualization.DataTable();
+    data.addColumn("string", "school");
+    data.addColumn("number", "count");
+
+    const dataArray = topData.map((item) => [item.school, item.count]);
+    data.addRows(dataArray);
+
+    const options = {
+      title: "Keyword Analysis",
+      legend: { position: "none" },
+      vAxis: { title: "count" },
+      hAxis: { title: "school" },
+      width: "100%",
+      height: "100%",
+    };
+
+    const chart = new google.visualization.ColumnChart(
+      document.getElementById("chart")
+    );
+    chart.draw(data, options);
+  });
+}
+
+async function drawChart_countryYear() {
   const result = await get_results(10);
   const topData = result.results.slice(0, 50);
 

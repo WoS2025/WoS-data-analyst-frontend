@@ -1,6 +1,6 @@
 import { ref, watch } from "vue";
 
-const temp_id_user = ref("fb0965e5-2288-48a7-be44-ffb6fe4e5b36");
+const temp_id_user = ref(""); //先刪掉ID
 const temp_username = ref("abc");
 
 export default {
