@@ -124,7 +124,6 @@ export default {
         //console.log(result);
         localStorage.setItem("jwt", result.jwt);
         localStorage.setItem("userEmail", this.loginEmail);
-        //console.log(result.jwt, "!!!");
 
         if (response.ok) {
           alert(`登入成功: ${result.message}`);

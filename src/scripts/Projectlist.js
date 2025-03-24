@@ -62,8 +62,6 @@ export default {
             console.log(err);
           });
         const currentUser = emailResponse.user_id;
-        
-        // console.log("This is currentUser" + currentUser);
 
         const response = await fetch(
           `https://backend-refactor-nqz1.onrender.com/user/${currentUser}`, //建議包url都單引號 by 智涵
@@ -79,12 +77,6 @@ export default {
         if (response.ok) {
           const result = await response.json();
           const workspaceIds = result.user.workspace_ids;
-
-          // console.log("This is result:" + result);
-
-
-          // console.log("This is workspaceIds:" + workspaceIds);
-
           // 要用個for loop 把這位user的工作區一一列出來
           // result 應該是一個 user 然後抓 user.workspace_ids
           const workspaceDetails = await Promise.all(
