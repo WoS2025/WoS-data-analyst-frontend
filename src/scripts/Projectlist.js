@@ -39,9 +39,7 @@ export default {
       const currentWorkspace = temp_id; // 之後要放workspace的id
       try {
         // 會送出token, 獲取這個user所持有的工作區
-
-        const email = localStorage.getItem("userEmail"); //// 感謝!!
-        // console.log(email);
+        const email = localStorage.getItem("userEmail");
         const emailResponse = await fetch(
           `https://backend-refactor-nqz1.onrender.com/user/email/${email}`,
           {
