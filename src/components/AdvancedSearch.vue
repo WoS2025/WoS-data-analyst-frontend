@@ -46,13 +46,13 @@
             "
             >領域成長</a
           >
-          <a
+          <!-- <a
             @click="
               hidden_btn();
               show_search(9);
             "
-            >學術機構</a
-          >
+            >作者/年份區間</a
+          > -->
           <a
             @click="
               hidden_btn();
@@ -201,17 +201,20 @@
             />
           </div>
         </div>
-        <!-- 學術機構 -->
+        <!-- 作者/年份區間
         <div class="single-field search-item" v-if="search_block === 9">
-          <p>學術機構</p>
+          <p>作者/年份區間</p>
           <label>
-            輸入關鍵字
-            <input
-              type="text"
-              v-model="single_field"
-              @keyup.enter="startAnalysis_institution()"
-              class="small-input"
-            />
+            開始年:
+            <input type="number" v-model="startYear" class="small-input" />
+          </label>
+          <label>
+            結束年:
+            <input type="number" v-model="endYear" class="small-input" />
+          </label>
+          <label>
+            最少出現次數(下限):
+            <input type="number" v-model="lower_limit" class="small-input" />
           </label>
           <div>
             <input
@@ -220,7 +223,7 @@
               @click="startAnalysis_institution()"
             />
           </div>
-        </div>
+        </div> -->
         <!-- 學術機構/年份區間 -->
         <div class="single-field search-item" v-if="search_block === 10">
           <p>學術機構/年份區間</p>
@@ -566,38 +569,40 @@ async function startAnalysis_singleField() {
 }
 
 // 學術機構
-async function startAnalysis_institution() {
-  //因為後端原因，暫時無法實作
-  showChart.value = false; //預處理，避免上一個圖表還在
-  const refresh = get_results(1);
-  const currentWorkspace = temp_id; // 之後要放workspace的id
-  const requestData = {
-    field: single_field.value,
-  };
-  try {
-    const response = await fetch(
-      `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/institution`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      }
-    );
+// async function startAnalysis_institution() {
+//   //因為後端原因，暫時無法實作
+//   showChart.value = false; //預處理，避免上一個圖表還在
+//   const refresh = get_results(10);
+//   const currentWorkspace = temp_id; // 之後要放workspace的id
+//   const requestData = {
+//     start: startYear.value,
+//     end: endYear.value,
+//     threshold: lower_limit.value,
+//   };
+//   try {
+//     const response = await fetch(
+//       `https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/analysis/institution`,
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(requestData),
+//       }
+//     );
 
-    if (!response.ok) {
-      throw new Error("API request failed");
-    }
+//     if (!response.ok) {
+//       throw new Error("API request failed");
+//     }
 
-    const responseData = await response.json();
-    //console.log(responseData);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
+//     const responseData = await response.json();
+//     console.log(responseData);
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
 
-  //drawChart_singleField();
-}
+//   drawChart_institution();
+// }
 
 // 學術機構/年份區間
 async function startAnalysis_institutionYear() {
@@ -626,7 +631,7 @@ async function startAnalysis_institutionYear() {
     }
 
     const responseData = await response.json();
-    //console.log(responseData);
+    console.log(responseData);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -636,9 +641,8 @@ async function startAnalysis_institutionYear() {
 
 // 國家/年份區間
 async function startAnalysis_countryYear() {
-  //因為COR被擋，暫時無法實作
   showChart.value = false; //預處理，避免上一個圖表還在
-  const refresh = get_results(1);
+  const refresh = get_results(10);
   const currentWorkspace = temp_id; // 之後要放workspace的id
   const requestData = {
     start: startYear.value,
@@ -668,7 +672,7 @@ async function startAnalysis_countryYear() {
     console.error("Error fetching data:", error);
   }
 
-  //drawChart_singleField();
+  drawChart_countryYear();
 }
 
 //物件比較函式
@@ -943,47 +947,57 @@ async function drawChart_singleField() {
   });
 }
 
-async function drawChart_institution() {
-  const result = await get_results(10);
-  const topData = result.results.slice(0, 50);
+// async function drawChart_institution() {
+//   const result = await get_results(10);
 
-  google.charts.load("current", { packages: ["corechart"] });
-  google.charts.setOnLoadCallback(async () => {
-    const data = new google.visualization.DataTable();
-    data.addColumn("number", "Year");
-    data.addColumn("number", "Count");
+//   const topData = result.results_institutions.slice(0, 50);
 
-    const dataArray = topData.map((item) => [item.year, item.count]);
-    data.addRows(dataArray);
+//   google.charts.load("current", { packages: ["corechart"] });
+//   google.charts.setOnLoadCallback(async () => {
+//     const data = new google.visualization.DataTable();
+//     data.addColumn("string", "publisher");
+//     data.addColumn("number", "count");
 
-    const options = {
-      title: "Field Analysis",
-      legend: { position: "none" },
-      hAxis: {
-        title: "Year",
-        format: "####", // Ensures the year is displayed without decimals
-        gridlines: {
-          count: data.getNumberOfRows() / 2, // Ensures gridlines match the number of data points
-        },
-      },
-      pointSize: 5,
-      vAxis: {
-        title: "Count",
-      },
-      height: "100%",
-      width: "100%",
-    };
+//     const dataArray = topData.map((item) => [item.institution, item.count]);
+//     console.log(topData);
+//     console.log(dataArray);
+//     data.addRows(dataArray);
 
-    const chart = new google.visualization.LineChart(
-      document.getElementById("chart")
-    );
-    chart.draw(data, options);
-  });
-}
+//     const options = {
+//       title: "Keyword Analysis",
+//       legend: { position: "none" },
+//       vAxis: { title: "count" },
+//       hAxis: { title: "institution" },
+//       width: "100%",
+//       height: "100%",
+//     };
+
+//     const chart = new google.visualization.ColumnChart(
+//       document.getElementById("chart")
+//     );
+//     chart.draw(data, options);
+//   });
+// }
 
 async function drawChart_institutionYear() {
   const result = await get_results(10);
-  const topData = result.results.slice(0, 50);
+  const topData = result.results;
+  const schoolCounts = {};
+
+  topData.forEach((item) => {
+    item.schools.forEach((school) => {
+      if (schoolCounts[school.school]) {
+        schoolCounts[school.school]++;
+      } else {
+        schoolCounts[school.school] = 1;
+      }
+    });
+  });
+  const dataArray = Object.entries(schoolCounts).map(([school, count]) => [
+    school,
+    count,
+  ]);
+  dataArray.sort((a, b) => b[1] - a[1]);
 
   google.charts.load("current", { packages: ["corechart"] });
   google.charts.setOnLoadCallback(async () => {
@@ -991,7 +1005,6 @@ async function drawChart_institutionYear() {
     data.addColumn("string", "school");
     data.addColumn("number", "count");
 
-    const dataArray = topData.map((item) => [item.school, item.count]);
     data.addRows(dataArray);
 
     const options = {
@@ -1012,36 +1025,32 @@ async function drawChart_institutionYear() {
 
 async function drawChart_countryYear() {
   const result = await get_results(10);
-  const topData = result.results.slice(0, 50);
+  const topData = result.results.slice(2)[0].slice(1, 50); //省略最大第一筆
+  //子標題無法使用
+  // const request = result.request;
+  // const subt ="Lower limit: " + request.threshold + ", " + request.start + "~" +request.end
 
   google.charts.load("current", { packages: ["corechart"] });
   google.charts.setOnLoadCallback(async () => {
     const data = new google.visualization.DataTable();
-    data.addColumn("number", "Year");
-    data.addColumn("number", "Count");
+    data.addColumn("string", "country");
+    data.addColumn("number", "count");
 
-    const dataArray = topData.map((item) => [item.year, item.count]);
+    const dataArray = topData.map((item) => [item.country, item.count]);
+    console.log(topData);
+    console.log(dataArray);
     data.addRows(dataArray);
 
     const options = {
-      title: "Field Analysis",
+      title: "Keyword Analysis",
       legend: { position: "none" },
-      hAxis: {
-        title: "Year",
-        format: "####", // Ensures the year is displayed without decimals
-        gridlines: {
-          count: data.getNumberOfRows() / 2, // Ensures gridlines match the number of data points
-        },
-      },
-      pointSize: 5,
-      vAxis: {
-        title: "Count",
-      },
-      height: "100%",
+      vAxis: { title: "count" },
+      hAxis: { title: "country" },
       width: "100%",
+      height: "100%",
     };
 
-    const chart = new google.visualization.LineChart(
+    const chart = new google.visualization.ColumnChart(
       document.getElementById("chart")
     );
     chart.draw(data, options);
