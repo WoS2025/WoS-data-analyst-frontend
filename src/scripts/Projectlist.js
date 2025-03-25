@@ -1,8 +1,8 @@
 import ProjectItem from "../components/ProjectItem.vue";
 import { ref, watch } from "vue";
 
-const temp_id = ref(""); //自己放自己要測試的workspace_id
-const temp_id_user = ref(""); //自己放自己要測試的user_id
+let temp_id = ref(""); //自己放自己要測試的workspace_id
+let temp_id_user = ref(""); //自己放自己要測試的user_id
 
 export default {
   components: {
@@ -61,6 +61,7 @@ export default {
           .catch(function (err) {
             console.log(err);
           });
+        temp_id_user = ref(emailResponse.user_id);
         const currentUser = emailResponse.user_id;
 
         const response = await fetch(
@@ -176,7 +177,7 @@ export default {
     async addProject() {
       if (this.newProjectName) {
         const data = {
-          token: this.getCookie("token"),
+          token: localStorage.getItem("jwt"),
           name: this.newProjectName,
         };
 
