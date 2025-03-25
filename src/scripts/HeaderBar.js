@@ -211,6 +211,7 @@ export default {
     logout() {
       this.isLoggedIn = false;
       this.deleteCookie("token");
+      localStorage.removeItem("jwt");
       alert("已登出");
       window.location.reload(); // 重新整理頁面
     },
