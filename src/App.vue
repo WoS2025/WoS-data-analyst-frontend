@@ -1,6 +1,7 @@
 <!-- app.vue -->
 <template>
   <div id="app">
+    <router-view />
     <HeaderBar class="header-bar" />
     <div class="panel">
       <Projectlist
