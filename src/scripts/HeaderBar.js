@@ -1,6 +1,6 @@
 import { ref, watch } from "vue";
 
-const temp_id_user = ref("fb0965e5-2288-48a7-be44-ffb6fe4e5b36");
+const temp_id_user = ref(""); //先刪掉ID
 const temp_username = ref("abc");
 
 export default {
@@ -124,7 +124,6 @@ export default {
         //console.log(result);
         localStorage.setItem("jwt", result.jwt);
         localStorage.setItem("userEmail", this.loginEmail);
-        //console.log(result.jwt, "!!!");
 
         if (response.ok) {
           alert(`登入成功: ${result.message}`);
@@ -212,6 +211,7 @@ export default {
     logout() {
       this.isLoggedIn = false;
       this.deleteCookie("token");
+      localStorage.removeItem("jwt");
       alert("已登出");
       window.location.reload(); // 重新整理頁面
     },

@@ -1,8 +1,8 @@
 import ProjectItem from "../components/ProjectItem.vue";
 import { ref, watch } from "vue";
 
-const temp_id = ref(""); //自己放自己要測試的workspace_id
-const temp_id_user = ref(""); //自己放自己要測試的user_id
+let temp_id = ref(""); //自己放自己要測試的workspace_id
+let temp_id_user = ref(""); //自己放自己要測試的user_id
 
 export default {
   components: {
@@ -39,9 +39,7 @@ export default {
       const currentWorkspace = temp_id; // 之後要放workspace的id
       try {
         // 會送出token, 獲取這個user所持有的工作區
-
-        const email = localStorage.getItem("userEmail"); //// 感謝!!
-        // console.log(email);
+        const email = localStorage.getItem("userEmail");
         const emailResponse = await fetch(
           `https://backend-refactor-nqz1.onrender.com/user/email/${email}`,
           {
@@ -61,9 +59,8 @@ export default {
           .catch(function (err) {
             console.log(err);
           });
+        temp_id_user = ref(emailResponse.user_id);
         const currentUser = emailResponse.user_id;
-        
-        // console.log("This is currentUser" + currentUser);
 
         const response = await fetch(
           `https://backend-refactor-nqz1.onrender.com/user/${currentUser}`, //建議包url都單引號 by 智涵
@@ -79,12 +76,6 @@ export default {
         if (response.ok) {
           const result = await response.json();
           const workspaceIds = result.user.workspace_ids;
-
-          // console.log("This is result:" + result);
-
-
-          // console.log("This is workspaceIds:" + workspaceIds);
-
           // 要用個for loop 把這位user的工作區一一列出來
           // result 應該是一個 user 然後抓 user.workspace_ids
           const workspaceDetails = await Promise.all(
@@ -184,7 +175,7 @@ export default {
     async addProject() {
       if (this.newProjectName) {
         const data = {
-          token: this.getCookie("token"),
+          token: localStorage.getItem("jwt"),
           name: this.newProjectName,
         };
 
