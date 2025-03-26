@@ -27,6 +27,9 @@ export default {
     }
   },
   methods: {
+    goToLogin() {
+      this.$router.push('/login'); // Navigate to the Login page
+    },
     showLoginModal() {
       this.isLoginModalVisible = true;
     },
