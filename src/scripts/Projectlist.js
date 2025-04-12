@@ -261,7 +261,7 @@ export default {
 
       try {
         const response = await fetch(
-          `${backendURL}/workspaces/%{currentWorkspace.value}`,
+          `${backendURL}/workspaces/${currentWorkspace.value}`,
           {
             method: "DELETE",
             headers: {
