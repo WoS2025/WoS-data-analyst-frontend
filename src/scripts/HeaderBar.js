@@ -139,42 +139,6 @@ export default {
         alert(`登入失敗: ${error.message}`);
       }
     },
-    // async forgotPassword() {
-    //   if (!this.validateEmail(this.loginEmail)) {
-    //     alert("請輸入有效的電子郵件地址");
-    //     return;
-    //   }
-
-    //   const userData = {
-    //     email: this.loginEmail,
-    //   };
-
-    //   try {
-    //     // 會送出email
-    //     // "忘記密碼?"：把登入列email交給後端 供重設密碼
-    //     const response = await fetch(
-    //       "https://wos-data-analysis-backend.onrender.com/api/auth/forgotPassword",
-    //       {
-    //         method: "POST",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(userData),
-    //       }
-    //     );
-
-    //     const result = await response.json();
-
-    //     if (response.ok) {
-    //       alert(`已寄送重設密碼的信件至該信箱: ${result.message}`);
-    //       this.hideModal();
-    //     } else {
-    //       throw new Error(result.message);
-    //     }
-    //   } catch (error) {
-    //     alert(`重設密碼信件寄出失敗: ${error.message}`);
-    //   }
-    // },
 
     async resetPassword() {
       // const userData = {

@@ -9,6 +9,7 @@
     <button v-if="showDelete" @click="deleteProject" class="delete-button">
       X
     </button>
+    
   </div>
 </template>
 

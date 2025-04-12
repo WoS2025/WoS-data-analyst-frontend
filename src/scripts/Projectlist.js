@@ -3,8 +3,8 @@ import { ref, watch } from "vue";
 import { backendURL } from "./config";
 
 
-let temp_id = ref(""); //自己放自己要測試的workspace_id
-let temp_id_user = ref("e53a6f2b-d2c8-4bbb-bea3-7822bdca0a86"); //自己放自己要測試的user_id
+let workspaceTempId = ref("fbce270d-7277-4660-8e00-9e9d7d26250c"); //自己放自己要測試的workspace_id
+let userTempId = ref("e53a6f2b-d2c8-4bbb-bea3-7822bdca0a86"); //自己放自己要測試的user_id
 
 export default {
   components: {
@@ -38,7 +38,8 @@ export default {
 
     async fetchWorkspaces() {
       const token = localStorage.getItem("jwt");
-      const currentWorkspace = temp_id; // 之後要放workspace的id
+      const currentWorkspace = workspaceTempId; // 之後要放workspace的id
+     
       try {
         // 會送出token, 獲取這個user所持有的工作區
         const email = localStorage.getItem("userEmail");
@@ -61,7 +62,7 @@ export default {
           .catch(function (err) {
             console.log(err);
           });
-        temp_id_user = ref(emailResponse.user_id);
+        userTempId = ref(emailResponse.user_id);
         const currentUser = emailResponse.user_id;
 
         const response = await fetch(
@@ -147,7 +148,7 @@ export default {
 
             console.log("最後一個工作區_id", lastWorkspace);
             // 將剛加入的工作區的 ID 添加到用戶的 workspace_ids 中
-            const currentUser = temp_id_user.value;
+            const currentUser = userTempId.value;
 
             const userResponse = await fetch(
               `${backendURL}/user/${currentUser}/workspace/${lastWorkspace}`,

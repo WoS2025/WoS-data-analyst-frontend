@@ -31,6 +31,7 @@ import UploadComponent from "./components/Upload.vue";
 import Projectlist from "./components/Projectlist.vue";
 import AdvancedSearch from "./components/AdvancedSearch.vue";
 import FileList from "./components/Filelist.vue";
+import { backendURL } from "./scripts/config";
 
 export default {
   name: "App",
@@ -83,7 +84,7 @@ export default {
       try {
         // 用以獲取指定工作區(workspaceName)裡面的文件列表
         const response = await fetch(
-          "https://wos-data-analysis-backend.onrender.com/api/file/getFolder",
+          `${backendURL}/api/file/getFolder`,
           {
             method: "POST",
             headers: {
