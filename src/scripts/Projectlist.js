@@ -1,8 +1,10 @@
 import ProjectItem from "../components/ProjectItem.vue";
 import { ref, watch } from "vue";
+import { backendURL } from "./config";
+
 
 let temp_id = ref(""); //自己放自己要測試的workspace_id
-let temp_id_user = ref(""); //自己放自己要測試的user_id
+let temp_id_user = ref("e53a6f2b-d2c8-4bbb-bea3-7822bdca0a86"); //自己放自己要測試的user_id
 
 export default {
   components: {
@@ -41,7 +43,7 @@ export default {
         // 會送出token, 獲取這個user所持有的工作區
         const email = localStorage.getItem("userEmail");
         const emailResponse = await fetch(
-          `https://backend-refactor-nqz1.onrender.com/user/email/${email}`,
+          `${backendURL}/user/email/${email}`,
           {
             method: "GET",
             headers: {
@@ -63,7 +65,7 @@ export default {
         const currentUser = emailResponse.user_id;
 
         const response = await fetch(
-          `https://backend-refactor-nqz1.onrender.com/user/${currentUser}`, //建議包url都單引號 by 智涵
+          `${backendURL}/user/${currentUser}`, //建議包url都單引號 by 智涵 你說的單引號指的是``還是''
           {
             method: "GET",
             headers: {
@@ -81,7 +83,7 @@ export default {
           const workspaceDetails = await Promise.all(
             workspaceIds.map(async (workspaceId) => {
               const workspaceResponse = await fetch(
-                `https://backend-refactor-nqz1.onrender.com/workspaces/${workspaceId}`,
+                `${backendURL}/workspaces/${workspaceId}`,
                 {
                   method: "GET",
                   headers: {
@@ -125,7 +127,7 @@ export default {
       console.log("addWorkspaceToUser");
       try {
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/workspaces",
+          `${backendURL}/workspaces`,
           {
             method: "GET",
             headers: {
@@ -148,7 +150,7 @@ export default {
             const currentUser = temp_id_user.value;
 
             const userResponse = await fetch(
-              `https://backend-refactor-nqz1.onrender.com/user/${currentUser}/workspace/${lastWorkspace}`,
+              `${backendURL}/user/${currentUser}/workspace/${lastWorkspace}`,
               {
                 method: "GET",
                 headers: {
@@ -181,7 +183,7 @@ export default {
 
         try {
           const response = await fetch(
-            "https://backend-refactor-nqz1.onrender.com/workspaces",
+            `${backendURL}/workspaces`,
             {
               method: "POST",
               headers: {
@@ -220,7 +222,7 @@ export default {
       try {
         // 不確定要改成哪個API
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/workspaces",
+          `${backendURL}/workspaces`,
           {
             method: "GET",
             headers: {
@@ -259,7 +261,7 @@ export default {
 
       try {
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/workspaces/%{currentWorkspace.value}",
+          `${backendURL}/workspaces/%{currentWorkspace.value}`,
           {
             method: "DELETE",
             headers: {

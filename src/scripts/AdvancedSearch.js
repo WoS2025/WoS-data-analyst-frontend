@@ -1,5 +1,7 @@
 import { ref, watch } from "vue";
 import { VueSpinnerHourglass } from "vue3-spinners";
+import { backendURL } from "./config";
+
 
 //前置資料
 const dropdownOpen = ref(false);

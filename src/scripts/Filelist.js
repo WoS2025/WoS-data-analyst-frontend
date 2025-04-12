@@ -1,4 +1,5 @@
 import { ref, watch } from "vue";
+import { backendURL } from "./config";
 
 
 const temp_id = ref('200270e4-2982-409f-8424-e3817969ca80');
@@ -78,7 +79,7 @@ export default {
 
         
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/files",
+          `${backendURL}/workspaces/${currentWorkspace.value}/files`,
           {
             method: "PUT",
             headers: {
@@ -118,7 +119,7 @@ export default {
         // 會提交token 工作區 選擇刪除的文件
         // "刪除"：勾選好要刪除的文件以後，也通知後端將其移除於資料庫
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/files/${fileData.name}",
+          `${backendURL}/workspaces/${currentWorkspace.value}/files/${fileData.name}`,
           {
             method: "DELETE",
             headers: {

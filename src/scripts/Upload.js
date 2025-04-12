@@ -1,4 +1,5 @@
 import { ref, watch } from "vue";
+import { backendURL } from "./config";
 
 
 const temp_id = ref('200270e4-2982-409f-8424-e3817969ca80');
@@ -51,7 +52,7 @@ export default {
             // 會送出token 工作區 上傳的文件
             // 將上傳的文件保存，並指定使用者與其所屬的工作區
             const response = await fetch(
-              "https://backend-refactor-nqz1.onrender.com/workspaces/${currentWorkspace.value}/files/${fileData.name}",
+              `${backendURL}/workspaces/${currentWorkspace.value}/files/${fileData.name}`,
               {
                 method: "PUT",
                 headers: {

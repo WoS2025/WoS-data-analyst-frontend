@@ -1,4 +1,5 @@
 import { ref, watch } from "vue";
+import { backendURL } from "./config";
 
 const temp_id_user = ref(""); //先刪掉ID
 const temp_username = ref("abc");
@@ -74,7 +75,7 @@ export default {
         // 提交email 密碼
         // "註冊"
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/user/register",
+          `${backendURL}/user/register`,
           {
             method: "POST",
             headers: {
@@ -110,7 +111,7 @@ export default {
         // 提交email 密碼
         // "登入"
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com/user/login",
+          `${backendURL}/user/login`,
           {
             method: "POST",
             headers: {
@@ -185,7 +186,7 @@ export default {
         // 提交OTP與新密碼後點下"重設密碼"
         // 要等後端的API
         const response = await fetch(
-          "https://backend-refactor-nqz1.onrender.com//forgotPassword",
+          `${backendURL}/forgotPassword`,
           {
             method: "POST",
             headers: {
