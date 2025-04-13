@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "vue": "^3.4.21",
+    "vue-router": "^4.5.0",
     "vue3-spinners": "^1.2.2"
   },
   "devDependencies": {
