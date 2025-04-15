@@ -7,7 +7,7 @@
             :class="{ active: selectedProject === project }"
             :project="project"
             @click="selectProject(project)"
-            @delete-project="confirmDeleteProject"
+            @delete-project="confirmDeleteProject(project.name, index)"
           />
         </li>
       </ul>
@@ -40,7 +40,7 @@
       <div class="modal-content">
         <span class="close" @click="hideDeleteModal">&times;</span>
         <h2>確定刪除工作區 "{{ projectToDelete }}" 嗎？</h2>
-        <button @click="deleteProject">確認</button>
+        <button @click="deleteProject(isDeleteModalVisible - 1)">確認</button>
         <button @click="hideDeleteModal">取消</button>
       </div>
     </div>

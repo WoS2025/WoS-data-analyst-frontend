@@ -2,7 +2,6 @@ import ProjectItem from "../components/ProjectItem.vue";
 import { ref, watch } from "vue";
 import { backendURL } from "./config";
 
-
 let workspaceTempId = ref("fbce270d-7277-4660-8e00-9e9d7d26250c"); //自己放自己要測試的workspace_id
 let userTempId = ref("e53a6f2b-d2c8-4bbb-bea3-7822bdca0a86"); //自己放自己要測試的user_id
 
@@ -39,20 +38,17 @@ export default {
     async fetchWorkspaces() {
       const token = localStorage.getItem("jwt");
       const currentWorkspace = workspaceTempId; // 之後要放workspace的id
-     
+
       try {
         // 會送出token, 獲取這個user所持有的工作區
         const email = localStorage.getItem("userEmail");
-        const emailResponse = await fetch(
-          `${backendURL}/user/email/${email}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+        const emailResponse = await fetch(`${backendURL}/user/email/${email}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
           .then(function (response) {
             return response.json();
           })
@@ -127,16 +123,13 @@ export default {
     async findLastWorkspace() {
       console.log("addWorkspaceToUser");
       try {
-        const response = await fetch(
-          `${backendURL}/workspaces`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${this.getCookie("token")}`,
-            },
-          }
-        );
+        const response = await fetch(`${backendURL}/workspaces`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.getCookie("token")}`,
+          },
+        });
 
         if (response.ok) {
           const result = await response.json();
@@ -183,16 +176,13 @@ export default {
         };
 
         try {
-          const response = await fetch(
-            `${backendURL}/workspaces`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            }
-          );
+          const response = await fetch(`${backendURL}/workspaces`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
           console.log("response", response);
 
           if (response.ok) {
@@ -222,15 +212,12 @@ export default {
 
       try {
         // 不確定要改成哪個API
-        const response = await fetch(
-          `${backendURL}/workspaces`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`${backendURL}/workspaces`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         if (response.ok) {
           const result = await response.json();
@@ -247,46 +234,77 @@ export default {
     toggleSidebar() {
       this.isCollapsed = !this.isCollapsed;
     },
-    confirmDeleteProject(projectName) {
+    confirmDeleteProject(projectName, ind) {
       this.projectToDelete = projectName;
-      this.isDeleteModalVisible = true;
+      this.isDeleteModalVisible = ind + 1;
     },
     hideDeleteModal() {
-      this.isDeleteModalVisible = false;
+      this.isDeleteModalVisible = 0;
     },
-    async deleteProject() {
-      const data = {
-        workspace: this.projectToDelete,
-        token: this.getCookie("token"),
-      };
-
+    async deleteProject(ind) {
+      console.log(ind);
+      const token = localStorage.getItem("jwt");
+      const currentWorkspace = workspaceTempId; // 之後要放workspace的id
       try {
+        // 會送出token, 獲取這個user所持有的工作區
+        const email = localStorage.getItem("userEmail");
+        const emailResponse = await fetch(`${backendURL}/user/email/${email}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            return data.user;
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+        userTempId = ref(emailResponse.user_id);
+        const currentUser = emailResponse.user_id;
+
         const response = await fetch(
-          `${backendURL}/workspaces/${currentWorkspace.value}`,
+          `${backendURL}/user/${currentUser}`, //建議包url都單引號 by 智涵 你說的單引號指的是``還是''
           {
-            method: "DELETE",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(data),
           }
         );
 
-        const result = await response.json();
-
         if (response.ok) {
-          alert(`工作區刪除成功: ${result.message}`);
-          this.projects = this.projects.filter(
-            (project) => project.name !== this.projectToDelete
+          const result = await response.json();
+          const workspaceIds = result.user.workspace_ids;
+          const deleteWorkspaceId = workspaceIds[ind - 1];
+          const deleteResponse = await fetch(
+            ///user/<user_id>/workspace/<workspace_id>
+            `${backendURL}/user/${currentUser}/workspace/${deleteWorkspaceId}`, //建議包url都單引號 by 智涵 你說的單引號指的是``還是''
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
           );
-          this.$emit("delete-success");
+          if (deleteResponse.ok) {
+            this.hideDeleteModal();
+            this.fetchWorkspaces();
+            window.location.reload();
+          } else {
+            console.error("刪除失敗", deleteResponse.statusText);
+          }
         } else {
-          throw new Error(result.message);
+          console.error("刪除失敗", response.statusText);
         }
       } catch (error) {
         alert(`刪除失敗: ${error.message}`);
-      } finally {
-        this.hideDeleteModal();
       }
     },
   },
