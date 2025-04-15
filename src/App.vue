@@ -19,7 +19,7 @@
         :files="files"
         :project="selectedProject"
         @upload-success="refreshFiles"
-        v-if="selectedProject && files.length > 0"
+        v-if="selectedProject && selectedProject.files.length > 0"
         class="file-list-container"
       />
     </div>
@@ -53,7 +53,7 @@ export default {
   computed: {
     selectedComponent() {
       if (this.selectedProject) {
-        return this.selectedProject.files === 0
+        return this.selectedProject.files.length === 0
           ? "UploadComponent"
           : "AdvancedSearch";
       }
@@ -68,7 +68,7 @@ export default {
     },
     async setSelectedProject(project) {
       this.selectedProject = project;
-      await this.fetchFiles(project.name);
+
     },
     async fetchProjects() {
       const data = {
@@ -76,38 +76,40 @@ export default {
         password: localStorage.getItem("password"),
       };
     },
-    async fetchFiles(workspaceName) {
-      const data = {
-        token: this.getCookie("token"),
-        workspace: workspaceName,
-      };
+    // async fetchFiles(workspaceName) {
+    //   const data = {
+    //     token: this.getCookie("token"),
+    //     workspace: workspaceName,
+    //   };
 
-      try {
-        // 用以獲取指定工作區(workspaceName)裡面的文件列表
-        const response = await fetch(
-          `${backendURL}/api/file/getFolder`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          }
-        );
+    //   try {
+    //     // 用以獲取指定工作區(workspaceName)裡面的文件列表
+    //     const response = await fetch(
+    //       `${backendURL}/user/workspaces/<workspace_id>/files`,
+    //       {
+    //         method: "PUT",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(data),
+    //       }
+    //     );
 
-        if (response.ok) {
-          const result = await response.json();
-          this.files = result.files;
-          if (this.selectedProject) {
-            this.selectedProject.files = result.files.length; // 更新项目的文件数量
-          }
-        } else {
-          console.error("獲取工作區檔案失敗", response.statusText);
-        }
-      } catch (error) {
-        console.error("請求失敗", error);
-      }
-    },
+    //     console.log(response.status)
+
+    //     if (response.ok) {
+    //       const result = await response.json();
+    //       this.files = result.files;
+    //       if (this.selectedProject) {
+    //         this.selectedProject.files = result.files.length; // 更新项目的文件数量
+    //       }
+    //     } else {
+    //       console.error("獲取工作區檔案失敗", response.statusText);
+    //     }
+    //   } catch (error) {
+    //     console.error("請求失敗", error);
+    //   }
+    // },
     async refreshFiles() {
       if (this.selectedProject) {
         await this.fetchFiles(this.selectedProject.name);
