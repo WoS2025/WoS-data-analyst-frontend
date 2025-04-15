@@ -1,9 +1,8 @@
 import { ref, watch } from "vue";
 import { backendURL } from "./config";
-import { encode, decode } from 'js-base64';
+import { encode, decode } from "js-base64";
 
-
-const temp_id = ref('5689a828-369f-4135-ae1e-352b503fba97');
+const temp_id = ref("3878f95e-935a-48eb-81ad-ad81f99c9c3d");
 
 export default {
   props: {
@@ -42,14 +41,11 @@ export default {
     async convertFiles() {
       if (this.files && this.files.length > 0) {
         if (this.filesData && this.filesData.length === this.files.length) {
-
-          
           const currentWorkspace = temp_id; // 之後要放workspace的id
           const data = {
             // 之後filesData要加密為base64
             file: this.filesData,
           };
-    
 
           try {
             // 會送出token 工作區 上傳的文件

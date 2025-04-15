@@ -651,6 +651,7 @@ async function startAnalysis_countryYear() {
     threshold: lower_limit.value,
   };
   console.log(requestData);
+
   try {
     const response = await fetch(
       `${backendURL}/workspaces/${currentWorkspace.value}/analysis/country/year`,
@@ -1026,8 +1027,7 @@ async function drawChart_institutionYear() {
 
 async function drawChart_countryYear() {
   const result = await get_results(10);
-  console.log(result.results.slice(2)[0])
-  const topData = result.results.slice(2)[0].slice(1, 50); //省略最大第一筆
+  const topData = result.results.slice(1); //省略最大第一筆
   //子標題無法使用
   // const request = result.request;
   // const subt ="Lower limit: " + request.threshold + ", " + request.start + "~" +request.end
