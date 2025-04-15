@@ -405,7 +405,7 @@ async function startAnalysis_singleKeyword() {
     // 會提交工作區 文件列表 user指定的關鍵字
     // "關鍵字成長"：使用者可以查詢一個關鍵字，此API的用途是統計這個關鍵字於歷年成長的趨勢
     const response = await fetch(
-      `${backendURL}workspaces/${currentWorkspace.value}/analysis/keyword`,
+      `${backendURL}/workspaces/${currentWorkspace.value}/analysis/keyword`,
       {
         method: "POST",
         headers: {
@@ -441,7 +441,7 @@ async function startAnalysis_yearAuthor() {
     // 會提交工作區 文件列表 user指定的作者名稱
     // "作者"：使用者輸入起訖年與作者名稱後，統計作者於此期間發表的數量
     const response = await fetch(
-      `${backendURL}workspaces/${currentWorkspace.value}/analysis/author/year`,
+      `${backendURL}/workspaces/${currentWorkspace.value}/analysis/author/year`,
       {
         method: "POST",
         headers: {
@@ -473,7 +473,7 @@ async function startAnalysis_author_cite() {
     // 會提交工作區 文件列表 user指定的最少引用次數
     // "引用次數"：輸入最少次數後，列出>=該引用次數的標題和作者資訊
     const response = await fetch(
-      `${backendURL}workspaces/${currentWorkspace.value}/analysis/reference`,
+      `${backendURL}/workspaces/${currentWorkspace.value}/analysis/reference`,
       {
         method: "POST",
         headers: {
@@ -509,7 +509,7 @@ async function startAnalysis_fieldYear() {
     // 會提交工作區 文件列表 起訖年 最少出現次數數值
     // "研究領域"：統計在某區間裡面，各個研究領域分析的論文數目
     const response = await fetch(
-      `${backendURL}workspaces/${currentWorkspace.value}/analysis/field/year`,
+      `${backendURL}/workspaces/${currentWorkspace.value}/analysis/field/year`,
       {
         method: "POST",
         headers: {
@@ -546,7 +546,7 @@ async function startAnalysis_singleField() {
     const response = await fetch(
       // 會提交工作區 文件列表 user指定的關鍵字
       // "領域成長"：輸入關鍵字後，分析該領域每年的成長趨勢
-      `${backendURL}workspaces/${currentWorkspace.value}/analysis/field`,
+      `${backendURL}/workspaces/${currentWorkspace.value}/analysis/field`,
       {
         method: "POST",
         headers: {
@@ -617,7 +617,7 @@ async function startAnalysis_institutionYear() {
   };
   try {
     const response = await fetch(
-      `${backendURL}workspaces/${currentWorkspace.value}/analysis/institution/year`,
+      `${backendURL}/workspaces/${currentWorkspace.value}/analysis/institution/year`,
       {
         method: "POST",
         headers: {
@@ -653,7 +653,7 @@ async function startAnalysis_countryYear() {
   console.log(requestData);
   try {
     const response = await fetch(
-      `${backendURL}workspaces/${currentWorkspace.value}/analysis/country/year`,
+      `${backendURL}/workspaces/${currentWorkspace.value}/analysis/country/year`,
       {
         method: "POST",
         headers: {
@@ -704,7 +704,7 @@ async function get_results(max_r) {
   while (attempt < maxRetries) {
     try {
       const response = await fetch(
-        `${backendURL}workspaces/${currentWorkspace.value}/analysis/result`,
+        `${backendURL}/workspaces/${currentWorkspace.value}/analysis/result`,
         {
           method: "GET",
           headers: {
@@ -1026,6 +1026,7 @@ async function drawChart_institutionYear() {
 
 async function drawChart_countryYear() {
   const result = await get_results(10);
+  console.log(result.results.slice(2)[0])
   const topData = result.results.slice(2)[0].slice(1, 50); //省略最大第一筆
   //子標題無法使用
   // const request = result.request;
