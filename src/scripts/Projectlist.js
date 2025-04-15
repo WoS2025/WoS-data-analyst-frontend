@@ -241,7 +241,9 @@ export default {
       this.isDeleteModalVisible = 0;
     },
     async deleteProject(ind) {
+      ind = ind + 1;
       console.log(ind);
+
       const token = localStorage.getItem("jwt");
       const currentWorkspace = workspaceTempId; // 之後要放workspace的id
       try {
