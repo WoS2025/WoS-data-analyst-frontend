@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "js-base64": "^3.7.7",
     "vue": "^3.4.21",
     "vue-router": "^4.5.0",
     "vue3-spinners": "^1.2.2"

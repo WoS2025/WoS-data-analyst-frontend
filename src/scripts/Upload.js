@@ -1,8 +1,9 @@
 import { ref, watch } from "vue";
 import { backendURL } from "./config";
+import { encode, decode } from 'js-base64';
 
 
-const temp_id = ref('200270e4-2982-409f-8424-e3817969ca80');
+const temp_id = ref('5689a828-369f-4135-ae1e-352b503fba97');
 
 export default {
   props: {
@@ -24,12 +25,13 @@ export default {
       if (parts.length === 2) return parts.pop().split(";").shift();
     },
     handleFiles(event) {
+      console.log("handleFiles");
       this.files = Array.from(event.target.files);
       let filesData = [];
       this.files.forEach((file) => {
         const reader = new FileReader();
         reader.onload = (e) => {
-          filesData.push({ name: file.name, content: e.target.result });
+          filesData.push({ name: file.name, content: encode(e.target.result) });
           if (filesData.length === this.files.length) {
             this.filesData = filesData;
           }
@@ -40,11 +42,12 @@ export default {
     async convertFiles() {
       if (this.files && this.files.length > 0) {
         if (this.filesData && this.filesData.length === this.files.length) {
+
           
           const currentWorkspace = temp_id; // 之後要放workspace的id
           const data = {
             // 之後filesData要加密為base64
-            files: filesData,
+            file: this.filesData,
           };
     
 
@@ -52,7 +55,7 @@ export default {
             // 會送出token 工作區 上傳的文件
             // 將上傳的文件保存，並指定使用者與其所屬的工作區
             const response = await fetch(
-              `${backendURL}/workspaces/${currentWorkspace.value}/files/${fileData.name}`,
+              `${backendURL}/workspaces/${currentWorkspace.value}/files`,
               {
                 method: "PUT",
                 headers: {
@@ -63,8 +66,6 @@ export default {
             );
 
             if (response.ok) {
-              const result = await response.json();
-              console.log("文件上傳成功：", result);
               alert("文件上傳成功");
               this.$emit("upload-success");
             } else {

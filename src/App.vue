@@ -7,6 +7,7 @@
       <Projectlist
         @select-project="setSelectedProject"
         @delete-success="refreshProjects"
+        @update-files="refreshFiles"
       />
       <component
         :is="selectedComponent"
@@ -19,7 +20,7 @@
         :files="files"
         :project="selectedProject"
         @upload-success="refreshFiles"
-        v-if="selectedProject && selectedProject.files.length > 0"
+        v-if="selectedProject && files.length > 0"
         class="file-list-container"
       />
     </div>
@@ -68,7 +69,6 @@ export default {
     },
     async setSelectedProject(project) {
       this.selectedProject = project;
-
     },
     async fetchProjects() {
       const data = {
@@ -110,9 +110,9 @@ export default {
     //     console.error("請求失敗", error);
     //   }
     // },
-    async refreshFiles() {
+    async refreshFiles(files) {
       if (this.selectedProject) {
-        await this.fetchFiles(this.selectedProject.name);
+        this.files=files
       }
     },
     async refreshProjects() {
