@@ -79,7 +79,7 @@ export default {
 
         
         const response = await fetch(
-          `${backendURL}/workspaces/${currentWorkspace.value}/files`,
+          `${backendURL}/user/workspaces/${currentWorkspace.value}/files`,
           {
             method: "PUT",
             headers: {
@@ -119,7 +119,7 @@ export default {
         // 會提交token 工作區 選擇刪除的文件
         // "刪除"：勾選好要刪除的文件以後，也通知後端將其移除於資料庫
         const response = await fetch(
-          `${backendURL}/workspaces/${currentWorkspace.value}/files/${fileData.name}`,
+          `${backendURL}/user/workspaces/${currentWorkspace.value}/files/${fileData.name}`,
           {
             method: "DELETE",
             headers: {

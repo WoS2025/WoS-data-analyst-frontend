@@ -221,9 +221,8 @@ export default {
 
         if (response.ok) {
           const result = await response.json();
-          project.files = result.files.length;
-          this.$emit("update-files", result.files);
-          console.log("工作區底下的檔案:", result.files);
+          this.$emit("update-files", project.files);
+          console.log("工作區底下的檔案:", project.files);
         } else {
           console.error("獲取工作區檔案失敗", response.statusText);
         }
