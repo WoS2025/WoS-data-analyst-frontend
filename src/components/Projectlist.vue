@@ -6,7 +6,7 @@
           <ProjectItem
             :class="{ active: selectedProject === project }"
             :project="project"
-            @click="selectProject(project)"
+            @click="selectProject(project, index)"
             @delete-project="confirmDeleteProject(project.name, index)"
           />
         </li>

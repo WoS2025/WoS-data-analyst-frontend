@@ -201,9 +201,12 @@ export default {
         }
       }
     },
-    async selectProject(project) {
+    async selectProject(project, ind) {
       this.$emit("select-project", project);
       this.selectedProject = project;
+      console.log(project, "!!!", ind);
+      console.log(project.workspace_id);
+      localStorage.setItem("workspaceID", project.workspace_id);
 
       const data = {
         workspace: project.name,

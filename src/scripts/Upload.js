@@ -41,17 +41,19 @@ export default {
     async convertFiles() {
       if (this.files && this.files.length > 0) {
         if (this.filesData && this.filesData.length === this.files.length) {
-          const currentWorkspace = temp_id; // 之後要放workspace的id
+          const currentWorkspace = localStorage.getItem("workspaceID");
+          console.log(this.filesData, "!!!!!");
           const data = {
             // 之後filesData要加密為base64
             file: this.filesData,
           };
+          console.log(data, "!!!!!");
 
           try {
             // 會送出token 工作區 上傳的文件
             // 將上傳的文件保存，並指定使用者與其所屬的工作區
             const response = await fetch(
-              `${backendURL}/workspaces/${currentWorkspace.value}/files`,
+              `${backendURL}/workspaces/${currentWorkspace}/files`,
               {
                 method: "PUT",
                 headers: {
@@ -64,9 +66,11 @@ export default {
             if (response.ok) {
               alert("文件上傳成功");
               this.$emit("upload-success");
+              window.location.reload();
             } else {
               console.error("文件上傳失敗", response.statusText);
               alert("文件上傳失敗");
+              window.location.reload();
             }
           } catch (error) {
             console.error("請求失敗", error);

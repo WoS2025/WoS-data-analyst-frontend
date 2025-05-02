@@ -1,10 +1,8 @@
 import { ref, watch } from "vue";
 import { backendURL } from "./config";
+import { encode, decode } from "js-base64";
 
-
-const temp_id = ref('200270e4-2982-409f-8424-e3817969ca80');
-
-
+const temp_id = ref("200270e4-2982-409f-8424-e3817969ca80");
 
 export default {
   name: "FileList",
@@ -58,7 +56,7 @@ export default {
       for (const file of files) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          filesData.push({ name: file.name, content: e.target.result });
+          filesData.push({ name: file.name, content: encode(e.target.result) });
           if (filesData.length === files.length) {
             this.uploadFiles(filesData);
           }
@@ -67,19 +65,18 @@ export default {
       }
     },
     async uploadFiles(filesData) {
-      const currentWorkspace = temp_id; // 之後要放workspace的id
+      const currentWorkspace = localStorage.getItem("workspaceID"); // 之後要放workspace的id
       const data = {
         // 之後filesData要加密為base64
-        files: filesData,
+        file: filesData,
       };
 
       try {
         // 會提交token 工作區 上傳的文件
         // 上傳文件後將其儲存至資料庫
 
-        
         const response = await fetch(
-          `${backendURL}/user/workspaces/${currentWorkspace.value}/files`,
+          `${backendURL}/workspaces/${currentWorkspace}/files`,
           {
             method: "PUT",
             headers: {
@@ -90,13 +87,15 @@ export default {
         );
 
         if (response.ok) {
-          const result = await response.json();
-          console.log("文件上傳成功：", result);
+          //const result = await response.json();
+          console.log("文件上傳成功：");
           alert("文件上傳成功");
           this.$emit("upload-success");
+          window.location.reload();
         } else {
           console.error("文件上傳失敗", response.statusText);
           alert("文件上傳失敗");
+          window.location.reload();
         }
       } catch (error) {
         console.error("請求失敗", error);
@@ -108,42 +107,38 @@ export default {
       this.selectedFiles = [];
     },
     async confirmDelete() {
-      const currentWorkspace = temp_id; // 之後要放workspace的id
-      const fileData = "abc"; // 之後改為刪除指定的檔案
+      const currentWorkspace = localStorage.getItem("workspaceID"); // 之後要放workspace的id
+      console.log(this.selectedFiles);
+      for (const file of this.selectedFiles) {
+        try {
+          // 會提交token 工作區 選擇刪除的文件
+          // "刪除"：勾選好要刪除的文件以後，也通知後端將其移除於資料庫
+          const response = await fetch(
+            `${backendURL}/workspaces/${currentWorkspace}/files/${file}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
 
-      const data = {
-        files: this.selectedFiles,
-      };
-
-      try {
-        // 會提交token 工作區 選擇刪除的文件
-        // "刪除"：勾選好要刪除的文件以後，也通知後端將其移除於資料庫
-        const response = await fetch(
-          `${backendURL}/user/workspaces/${currentWorkspace.value}/files/${fileData.name}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
+          if (response.ok) {
+            //const result = await response.json();
+            console.log("文件刪除成功：");
+            //alert("文件刪除成功");
+            this.$emit("upload-success");
+          } else {
+            console.error("文件刪除失敗", response.statusText);
+            //alert("文件刪除失敗");
           }
-        );
-
-        if (response.ok) {
-          const result = await response.json();
-          console.log("文件刪除成功：", result);
-          alert("文件刪除成功");
-          this.$emit("upload-success");
-        } else {
-          console.error("文件刪除失敗", response.statusText);
-          alert("文件刪除失敗");
+        } catch (error) {
+          console.error("請求失敗", error);
+          //alert("請求失敗");
         }
-      } catch (error) {
-        console.error("請求失敗", error);
-        alert("請求失敗");
       }
-
       this.toggleDeleteMode();
+      window.location.reload();
     },
   },
 };
