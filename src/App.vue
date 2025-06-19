@@ -2,32 +2,48 @@
 <template>
   <div id="app">
     <router-view />
-    <HeaderBar class="header-bar" />
-    <div class="panel">
-      <Projectlist
-        @select-project="setSelectedProject"
-        @delete-success="refreshProjects"
-        @update-files="refreshFiles"
-      />
-      <component
-        :is="selectedComponent"
-        :project="selectedProject"
-        :files="files"
-        :selectedWorkspace="selectedProject ? selectedProject.name : ''"
-        @upload-success="refreshFiles"
-      />
-      <FileList
-        :files="files"
-        :project="selectedProject"
-        @upload-success="refreshFiles"
-        v-if="selectedProject && files.length > 0"
-        class="file-list-container"
-      />
+    <div v-if="showMainPanel" class="panel">
+      <HeaderBar class="header-bar" @toggle-panel="togglePanel" />
+      <div class="panel">
+        <Projectlist
+          @select-project="setSelectedProject"
+          @delete-success="refreshProjects"
+          @update-files="refreshFiles"
+        />
+        <component
+          :is="selectedComponent"
+          :project="selectedProject"
+          :files="files"
+          :selectedWorkspace="selectedProject ? selectedProject.name : ''"
+          @upload-success="refreshFiles"
+        />
+        <FileList
+          :files="files"
+          :project="selectedProject"
+          @upload-success="refreshFiles"
+          v-if="selectedProject && files.length > 0"
+          class="file-list-container"
+        />
+      </div>
+    </div>
+    <div v-if="!showMainPanel" class="panel">
+      <Ai class="header-bar" @toggle-panel="togglePanel" />
+      <div class="content">
+        <ChatList class="chat-list" />
+        <div class="separator"></div>
+        <ChatArea class="chat-area" />
+        <div class="separator"></div>
+        <ChatFile class="chat-file" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Ai from "./components/Ai.vue";
+import ChatArea from "./components/ChatArea.vue";
+import ChatList from "./components/ChatList.vue";
+import ChatFile from "./components/ChatFile.vue";
 import HeaderBar from "./components/HeaderBar.vue";
 import UploadComponent from "./components/Upload.vue";
 import Projectlist from "./components/Projectlist.vue";
@@ -38,6 +54,10 @@ import { backendURL } from "./scripts/config";
 export default {
   name: "App",
   components: {
+    Ai,
+    ChatArea,
+    ChatList,
+    ChatFile,
     HeaderBar,
     UploadComponent,
     Projectlist,
@@ -46,6 +66,7 @@ export default {
   },
   data() {
     return {
+      showMainPanel: true, // 控制顯示的狀態
       selectedProject: null,
       projects: [],
       files: [],
@@ -66,6 +87,9 @@ export default {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
       if (parts.length === 2) return parts.pop().split(";").shift();
+    },
+    togglePanel() {
+      this.showMainPanel = !this.showMainPanel;
     },
     async setSelectedProject(project) {
       this.selectedProject = project;
@@ -112,7 +136,7 @@ export default {
     // },
     async refreshFiles(files) {
       if (this.selectedProject) {
-        this.files=files
+        this.files = files;
       }
     },
     async refreshProjects() {
@@ -131,7 +155,7 @@ export default {
 <style>
 #app {
   position: absolute;
-  top: 8%;
+  top: 7%;
   height: 92%;
   width: 99%;
   display: flex;
@@ -147,10 +171,32 @@ export default {
   display: flex;
   flex-direction: row;
   width: 100%;
+  height: 100%;
   flex-grow: 1;
 }
 
 .file-list-container {
   margin-left: auto;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%; /* 修改這裡，確保 content 填滿父容器 */
+  margin-top: 0; /* 移除 margin-top，避免影響高度 */
+  padding: 0; /* 確保沒有額外的內邊距 */
+}
+
+.chat-list,
+.chat-area,
+.chat-file {
+  flex: 1;
+}
+
+.separator {
+  width: 2px;
+  background-color: #ddd;
+  margin: 0px;
 }
 </style>
