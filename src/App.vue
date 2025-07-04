@@ -1,4 +1,3 @@
-<!-- app.vue -->
 <template>
   <div id="app">
     <router-view />
@@ -66,7 +65,7 @@ export default {
   },
   data() {
     return {
-      showMainPanel: true, // 控制顯示的狀態
+      showMainPanel: true,
       selectedProject: null,
       projects: [],
       files: [],
@@ -183,9 +182,9 @@ export default {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 100%; /* 修改這裡，確保 content 填滿父容器 */
-  margin-top: 0; /* 移除 margin-top，避免影響高度 */
-  padding: 0; /* 確保沒有額外的內邊距 */
+  height: 100%;
+  margin-top: 0;
+  padding: 0;
 }
 
 .chat-list,

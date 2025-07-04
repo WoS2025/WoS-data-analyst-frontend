@@ -1,8 +1,8 @@
 <template>
   <div class="file-upload-area">
-    <button class="file-item">檔案1</button>
-    <button class="file-item">檔案2</button>
-    <button class="file-item">檔案3</button>
+    <button v-for="(file, index) in files" :key="index" class="file-item">
+      {{ file.name }}
+    </button>
     <button class="file-item new-file">新增檔案</button>
   </div>
 </template>
@@ -10,6 +10,17 @@
 <script>
 export default {
   name: "FileUploadArea",
+  data() {
+    return {
+      files: [
+        { name: "檔案1" },
+        { name: "檔案2" },
+        { name: "檔案3" },
+        { name: "檔案4" },
+        { name: "檔案5" },
+      ],
+    };
+  },
 };
 </script>
 
