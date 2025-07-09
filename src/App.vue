@@ -28,11 +28,9 @@
     <div v-if="!showMainPanel" class="panel">
       <Ai class="header-bar" @toggle-panel="togglePanel" />
       <div class="content">
-        <ChatList class="chat-list" />
         <div class="separator"></div>
         <ChatArea class="chat-area" />
         <div class="separator"></div>
-        <ChatFile class="chat-file" />
       </div>
     </div>
   </div>
@@ -42,7 +40,6 @@
 import Ai from "./components/Ai.vue";
 import ChatArea from "./components/ChatArea.vue";
 import ChatList from "./components/ChatList.vue";
-import ChatFile from "./components/ChatFile.vue";
 import HeaderBar from "./components/HeaderBar.vue";
 import UploadComponent from "./components/Upload.vue";
 import Projectlist from "./components/Projectlist.vue";
@@ -56,7 +53,6 @@ export default {
     Ai,
     ChatArea,
     ChatList,
-    ChatFile,
     HeaderBar,
     UploadComponent,
     Projectlist,

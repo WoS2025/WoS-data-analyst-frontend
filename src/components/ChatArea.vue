@@ -92,7 +92,7 @@ export default {
 
 .ai-message {
   background-color: #f8d7da;
-  align-self: flex-start; /* AI 訊息置左 */
+  align-self: flex-start;
   text-align: left;
 }
 
