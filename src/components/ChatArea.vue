@@ -21,38 +21,35 @@
 </template>
 
 <script>
+import { backendURL } from "../scripts/config.js";
 export default {
   name: "ChatArea",
   data() {
     return {
-      messages: [
-        { type: "user", text: "我要睡覺" },
-        { type: "ai", text: "你去睡啊" },
-        { type: "user", text: "我要吃東西" },
-        { type: "ai", text: "已幫您搜尋附近寺廟" },
-        { type: "user", text: "簡報需要包含市場分析" },
-        { type: "ai", text: "不要" },
-        { type: "user", text: "iphone 15 pro max現在市價多少" },
-        { type: "ai", text: "我哪知道" },
-        { type: "user", text: "睡不著怎麼辦" },
-        {
-          type: "ai",
-          text: "可以聽聽看lemon中文版：\n那一天的忧郁  忧郁起来 那一天的寂寞  寂寞起来 连同着迷这个 炎炎夏日万般滋味 那个你 都化作了烙印 在我心底 挥之不去柠檬的香气",
-        },
-      ],
+      messages: [{ type: "ai", text: "您好，有什麼可以幫忙的嗎？" }],
       newMessage: "",
     };
   },
   methods: {
-    sendMessage() {
+    async sendMessage() {
       if (this.newMessage.trim() !== "") {
         this.messages.push({ type: "user", text: this.newMessage });
+        const userMessage = { prompt: this.newMessage };
         this.newMessage = "";
+        const response = await fetch(`http://127.0.0.1:5000/llm/ask`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userMessage),
+        });
+        const dataa = await response.json();
+        console.log(dataa.result);
 
         setTimeout(() => {
           this.messages.push({
             type: "ai",
-            text: "收到您的訊息，我正在處理。",
+            text: dataa.result,
           });
         }, 1000);
       }
