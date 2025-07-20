@@ -26,7 +26,12 @@ export default {
   name: "ChatArea",
   data() {
     return {
-      messages: [{ type: "ai", text: "您好，有什麼可以幫忙的嗎？" }],
+      messages: [
+        {
+          type: "ai",
+          text: "What do you wnat to know about federated learning analysis?",
+        },
+      ],
       newMessage: "",
     };
   },
@@ -34,9 +39,9 @@ export default {
     async sendMessage() {
       if (this.newMessage.trim() !== "") {
         this.messages.push({ type: "user", text: this.newMessage });
-        const userMessage = { prompt: this.newMessage };
+        const userMessage = { message: this.newMessage };
         this.newMessage = "";
-        const response = await fetch(`http://127.0.0.1:5000/llm/ask`, {
+        const response = await fetch(`http://127.0.0.1:5000/api/rag/chat`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -44,12 +49,12 @@ export default {
           body: JSON.stringify(userMessage),
         });
         const dataa = await response.json();
-        console.log(dataa.result);
+        console.log(dataa.message);
 
         setTimeout(() => {
           this.messages.push({
             type: "ai",
-            text: dataa.result,
+            text: dataa.message,
           });
         }, 1000);
       }
