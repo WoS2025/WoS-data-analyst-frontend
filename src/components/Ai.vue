@@ -17,7 +17,7 @@
           />
         </svg>
       </button>
-      <button v-if="isLoggedIn" @click="togglePanel">第二階段</button>
+      <button v-if="isLoggedIn" @click="togglePanel">第一階段</button>
       <button v-if="isLoggedIn" @click="logout">登出</button>
     </div>
   </div>
@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import HeaderBar from "../scripts/HeaderBar.js";
-export default HeaderBar;
+import Ai from "../scripts/Ai.js";
+export default Ai;
 </script>
 
-<style scoped src="../styles/HeaderBar.css"></style>
+<style scoped src="../styles/Ai.css"></style>

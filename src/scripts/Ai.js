@@ -31,14 +31,14 @@ export default {
     goToLogin() {
       this.$router.push("/login"); // Navigate to the Login page
     },
-    togglePanel() {
-      this.$emit("toggle-panel");
-    },
     showLoginModal() {
       this.isLoginModalVisible = true;
     },
     showRegisterModal() {
       this.isRegisterModalVisible = true;
+    },
+    togglePanel() {
+      this.$emit("toggle-panel");
     },
     showResetPasswordModal() {
       this.isResetPasswordModalVisible = true;
