@@ -568,43 +568,6 @@ async function startAnalysis_singleField() {
 
   drawChart_singleField();
 }
-
-// 學術機構
-// async function startAnalysis_institution() {
-//   //因為後端原因，暫時無法實作
-//   showChart.value = false; //預處理，避免上一個圖表還在
-//   const refresh = get_results(10);
-//   const currentWorkspace = temp_id; // 之後要放workspace的id
-//   const requestData = {
-//     start: startYear.value,
-//     end: endYear.value,
-//     threshold: lower_limit.value,
-//   };
-//   try {
-//     const response = await fetch(
-//       `${backendURL}workspaces/${currentWorkspace.value}/analysis/institution`,
-//       {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(requestData),
-//       }
-//     );
-
-//     if (!response.ok) {
-//       throw new Error("API request failed");
-//     }
-
-//     const responseData = await response.json();
-//     console.log(responseData);
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-
-//   drawChart_institution();
-// }
-
 // 學術機構/年份區間
 async function startAnalysis_institutionYear() {
   showChart.value = false; //預處理，避免上一個圖表還在
