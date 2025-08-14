@@ -2,24 +2,13 @@
   <div class="layout-container work-area-wrapper">
     <section>
       <label class="upload-area">
-        <h2 class="main-subheader">上傳你需要解析的論文</h2>
-        <div class="dashes">
+        <h2 class="main-subheader">上傳論文檔案</h2>
+        <div class="dashes" @click="triggerFileInput">
           <div class="brand-btn-container brand-color">
             <a class="btn-wrapper upload-btn">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="15"
-                height="15"
-                fill="none"
-              >
-                <path
-                  fill="#fff"
-                  fill-rule="evenodd"
-                  d="M5.6.6c-.7 0-1.3.5-1.3 1.2v2.5H1.8a1.3 1.3 0 000 2.5h2.5v2.5a1.3 1.3 0 102.5 0V6.8h2.5a1.2 1.2 0 100-2.5H6.8V1.8c0-.7-.5-1.2-1.2-1.2z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span class="btn-label">選擇檔案</span>
+              <div class="upload-icon">📁</div>
+              <span class="btn-label">點擊選擇檔案或拖拽到此處</span>
+              <small style="color: #999; margin-top: 8px;">支援 PDF, TXT, DOC 等格式</small>
             </a>
           </div>
           <input

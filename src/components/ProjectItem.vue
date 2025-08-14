@@ -4,12 +4,13 @@
     @mouseenter="showDeleteButton"
     @mouseleave="hideDeleteButton"
   >
-    <h3>{{ project.name }}</h3>
-    <p>檔案數量: {{ project.files.length }}</p>
+    <div class="project-name">{{ project.name }}</div>
+    <div class="project-info">
+      {{ project.files.length }} 個檔案
+    </div>
     <button v-if="showDelete" @click="deleteProject" class="delete-button">
-      X
+      ×
     </button>
-    
   </div>
 </template>
 

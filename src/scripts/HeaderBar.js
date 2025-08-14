@@ -1,17 +1,27 @@
 import { ref, watch } from "vue";
 import { backendURL } from "./config";
+import AuthService from "./AuthService";
 
 const temp_id_user = ref(""); //先刪掉ID
 const temp_username = ref("abc");
 
 export default {
   name: "HeaderBar",
+  emits: ['toggle-panel'], // 聲明 emit 事件
+  inheritAttrs: false, // 不自動繼承 class 等屬性
+  props: {
+    class: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       isLoginModalVisible: false,
       isRegisterModalVisible: false,
       isResetPasswordModalVisible: false,
       isLoggedIn: false,
+      currentUser: {},
       loginEmail: "",
       loginPassword: "",
       registerEmail: "",
@@ -21,13 +31,24 @@ export default {
       newPassword: "",
     };
   },
-  mounted() {
-    const token = this.getCookie("token");
-    if (token) {
-      this.isLoggedIn = true;
+  computed: {
+    userInitials() {
+      if (this.currentUser.username) {
+        return this.currentUser.username.substring(0, 2).toUpperCase();
+      }
+      return this.currentUser.email ? this.currentUser.email.substring(0, 2).toUpperCase() : 'U';
     }
   },
+  mounted() {
+    this.checkAuthStatus();
+  },
   methods: {
+    checkAuthStatus() {
+      this.isLoggedIn = AuthService.isAuthenticated();
+      if (this.isLoggedIn) {
+        this.currentUser = AuthService.getCurrentUser() || {};
+      }
+    },
     goToLogin() {
       this.$router.push("/login"); // Navigate to the Login page
     },
@@ -171,11 +192,10 @@ export default {
     },
 
     logout() {
+      AuthService.logout();
       this.isLoggedIn = false;
-      this.deleteCookie("token");
-      localStorage.removeItem("jwt");
-      alert("已登出");
-      window.location.reload(); // 重新整理頁面
+      this.currentUser = {};
+      this.$router.push('/login');
     },
     setCookie(name, value, days) {
       const d = new Date();

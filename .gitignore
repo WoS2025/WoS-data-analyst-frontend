@@ -1,2 +1,7 @@
 node_modules
 trash
+*.py
+*.sqlite3
+*.bin
+*.pyc
+backend/RAG/data/federated.json

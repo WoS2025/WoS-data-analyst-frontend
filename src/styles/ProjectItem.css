@@ -1,24 +1,94 @@
 .project-item {
   position: relative;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 12px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.project-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  transform: translateX(-4px);
+  transition: transform 0.3s ease;
+}
+
+.project-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+}
+
+.project-item:hover::before {
+  transform: translateX(0);
+}
+
+.project-item.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.project-item.active::before {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.project-name {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+
+.project-info {
+  font-size: 12px;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-info::before {
+  content: '📁';
+  font-size: 14px;
 }
 
 .delete-button {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  background-color: red;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 107, 107, 0.9);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.project-item:hover .delete-button {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.delete-button:hover {
+  background: rgba(238, 90, 36, 1);
+  transform: scale(1.1);
 }

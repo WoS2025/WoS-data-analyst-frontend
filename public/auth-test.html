@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct CORS Test</title>
+</head>
+<body>
+    <h1>CORS and Auth Test</h1>
+    <form id="loginForm">
+        <h2>Login Test</h2>
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <input type="password" id="password" placeholder="Password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
+    
+    <form id="registerForm">
+        <h2>Register Test</h2>
+        <input type="email" id="regEmail" placeholder="Email" required><br><br>
+        <input type="password" id="regPassword" placeholder="Password" required><br><br>
+        <button type="submit">Register</button>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+        const backendURL = 'http://127.0.0.1:5001'; // 使用新的端口
+        
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                console.log('Attempting login...');
+                const response = await fetch(`${backendURL}/user/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                document.getElementById('result').innerHTML = `<h3>Login Result:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                console.error('Login error:', error);
+                document.getElementById('result').innerHTML = `<h3>Login Error:</h3><p>${error.message}</p>`;
+            }
+        });
+        
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            
+            try {
+                console.log('Attempting register...');
+                const response = await fetch(`${backendURL}/user/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: email.split('@')[0],
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                document.getElementById('result').innerHTML = `<h3>Register Result:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                console.error('Register error:', error);
+                document.getElementById('result').innerHTML = `<h3>Register Error:</h3><p>${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

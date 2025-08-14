@@ -1,11 +1,9 @@
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { backendURL } from "../scripts/config";
-
-const temp_id_user = ref(""); //先刪掉ID
-const temp_username = ref("abc");
+import AuthService from "../scripts/AuthService";
 
 export default {
-  name: "HeaderBar",
+  name: "Login",
   data() {
     return {
       isLoginModalVisible: false,
@@ -13,25 +11,29 @@ export default {
       isResetPasswordModalVisible: false,
       isLoggedIn: false,
       isSignUp: false,
-      loginEmail: "",
-      loginPassword: "",
+      loginEmail: "test@test.com", // 預設測試帳號
+      loginPassword: "test123", // 預設測試密碼
       registerEmail: "",
       registerPassword: "",
-
       otp: "",
       newPassword: "",
     };
   },
   mounted() {
-    const token = this.getCookie("token");
-    if (token) {
+    // 檢查是否已登入
+    console.log('Login component mounted');
+    console.log('Vue instance methods:', Object.keys(this.$options.methods || {}));
+    if (AuthService.isAuthenticated()) {
       this.isLoggedIn = true;
+      this.$router.push('/');
     }
   },
   methods: {
     toggleSignUp() {
+      console.log('toggleSignUp called, current isSignUp:', this.isSignUp);
       this.isSignUp = !this.isSignUp; // Toggle the state
-       },
+      console.log('new isSignUp:', this.isSignUp);
+    },
     showLoginModal() {
       this.isLoginModalVisible = true;
     },
@@ -56,6 +58,10 @@ export default {
       return re.test(password);
     },
     async register() {
+      console.log('Register method called');
+      console.log('Register Email:', this.registerEmail);
+      console.log('Register Password:', this.registerPassword);
+      
       if (!this.validateEmail(this.registerEmail)) {
         alert("請輸入有效的電子郵件地址");
         return;
@@ -65,82 +71,36 @@ export default {
         return;
       }
 
-      const currentUser = temp_id_user; // 之後要放user的id
-
-      const username = temp_username;
-
-      const userData = {
-        username: username, // 目前還沒有這個變數 要之後加
-        email: this.registerEmail,
-        password: this.registerPassword,
-      };
-
-      try {
-        // 提交email 密碼
-        // "註冊"
-        const response = await fetch(
-          `${backendURL}/user/register`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-          }
-        );
-
-        const result = await response.json();
-
-        if (response.ok) {
-          alert(`註冊成功: ${result.message}`);
-          this.hideModal();
-        } else {
-          throw new Error(result.message);
-        }
-      } catch (error) {
-        alert(`註冊失敗: ${error.message}`);
+      const result = await AuthService.register(this.registerEmail, this.registerPassword);
+      console.log('Register result:', result);
+      
+      if (result.success) {
+        alert(`註冊成功: ${result.message}`);
+        this.hideModal();
+      } else {
+        alert(`註冊失敗: ${result.message}`);
       }
     },
     async login() {
-      const currentUser = temp_id_user;
-      const username = temp_username;
+      console.log('Login method called');
+      console.log('Email:', this.loginEmail);
+      console.log('Password:', this.loginPassword);
+      
+      if (!this.loginEmail || !this.loginPassword) {
+        alert('請輸入電子郵件和密碼');
+        return;
+      }
 
-      const userData = {
-        username: this.loginUsername, // 還沒有這個變數 要之後加
-        email: this.loginEmail,
-        password: this.loginPassword,
-      };
+      const result = await AuthService.login(this.loginEmail, this.loginPassword);
+      console.log('Login result:', result);
 
-      try {
-        // 提交email 密碼
-        // "登入"
-        const response = await fetch(
-          `${backendURL}/user/login`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-          }
-        );
-
-        const result = await response.json();
-        //console.log(result);
-        localStorage.setItem("jwt", result.jwt);
-        localStorage.setItem("userEmail", this.loginEmail);
-
-        if (response.ok) {
-          alert(`登入成功: ${result.message}`);
-          this.isLoggedIn = true;
-          this.setCookie("token", result.token, 7);
-          this.hideModal();
-          window.location.href = "http://localhost:5173/2024project/"; // 重新整理頁面
-        } else {
-          throw new Error(result.message);
-        }
-      } catch (error) {
-        alert(`登入失敗: ${error.message}`);
+      if (result.success) {
+        alert(`登入成功: ${result.message}`);
+        this.isLoggedIn = true;
+        this.hideModal();
+        this.$router.push('/'); // 使用路由導航到根路徑
+      } else {
+        alert(`登入失敗: ${result.message}`);
       }
     },
 
@@ -178,11 +138,12 @@ export default {
     },
 
     logout() {
-      this.isLoggedIn = false;
-      this.deleteCookie("token");
-      localStorage.removeItem("jwt");
-      alert("已登出");
-      window.location.reload(); // 重新整理頁面
+      AuthService.logout();
+    },
+    forgotPassword() {
+      console.log('Forgot password clicked');
+      // 這裡可以實現忘記密碼的邏輯
+      alert('忘記密碼功能尚未實現');
     },
     setCookie(name, value, days) {
       const d = new Date();

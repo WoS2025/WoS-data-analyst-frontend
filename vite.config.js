@@ -10,5 +10,5 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src') // Ensure this alias is set
     }
   },
-  base: '2024project' // Add a trailing slash for consistency
+  base: '/2024project/' // 修復 base URL，確保有正確的斜線
 });
