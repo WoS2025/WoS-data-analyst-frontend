@@ -2,9 +2,6 @@ import ProjectItem from "../components/ProjectItem.vue";
 import { ref, watch } from "vue";
 import { backendURL } from "./config";
 
-let workspaceTempId = ref("fbce270d-7277-4660-8e00-9e9d7d26250c"); //自己放自己要測試的workspace_id
-let userTempId = ref("e53a6f2b-d2c8-4bbb-bea3-7822bdca0a86"); //自己放自己要測試的user_id
-
 export default {
   components: {
     ProjectItem,
@@ -37,7 +34,6 @@ export default {
 
     async fetchWorkspaces() {
       const token = localStorage.getItem("jwt");
-      const currentWorkspace = workspaceTempId; // 之後要放workspace的id
 
       try {
         // 會送出token, 獲取這個user所持有的工作區
@@ -58,7 +54,6 @@ export default {
           .catch(function (err) {
             console.log(err);
           });
-        userTempId = ref(emailResponse.user_id);
         const currentUser = emailResponse.user_id;
 
         const response = await fetch(
@@ -80,7 +75,7 @@ export default {
           const workspaceDetails = await Promise.all(
             workspaceIds.map(async (workspaceId) => {
               const workspaceResponse = await fetch(
-                `${backendURL}/workspaces/${workspaceId}`,
+                `${backendURL}/user/workspaces/${workspaceId}`,
                 {
                   method: "GET",
                   headers: {
@@ -122,12 +117,34 @@ export default {
     },
     async findLastWorkspace() {
       console.log("addWorkspaceToUser");
+      const token = localStorage.getItem("jwt");
+      
       try {
-        const response = await fetch(`${backendURL}/workspaces`, {
+        // 先獲取用戶資訊
+        const email = localStorage.getItem("userEmail");
+        const emailResponse = await fetch(`${backendURL}/user/email/${email}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${this.getCookie("token")}`,
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            return data.user;
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+        const currentUser = emailResponse.user_id;
+
+        const response = await fetch(`${backendURL}/user/workspaces`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -141,8 +158,6 @@ export default {
 
             console.log("最後一個工作區_id", lastWorkspace);
             // 將剛加入的工作區的 ID 添加到用戶的 workspace_ids 中
-            const currentUser = userTempId.value;
-
             const userResponse = await fetch(
               `${backendURL}/user/${currentUser}/workspace/${lastWorkspace}`,
               {
@@ -176,7 +191,7 @@ export default {
         };
 
         try {
-          const response = await fetch(`${backendURL}/workspaces`, {
+          const response = await fetch(`${backendURL}/user/workspaces`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -215,7 +230,7 @@ export default {
 
       try {
         // 不確定要改成哪個API
-        const response = await fetch(`${backendURL}/workspaces`, {
+        const response = await fetch(`${backendURL}/user/workspaces`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -248,7 +263,6 @@ export default {
       console.log(ind);
 
       const token = localStorage.getItem("jwt");
-      const currentWorkspace = workspaceTempId; // 之後要放workspace的id
       try {
         // 會送出token, 獲取這個user所持有的工作區
         const email = localStorage.getItem("userEmail");
@@ -268,7 +282,6 @@ export default {
           .catch(function (err) {
             console.log(err);
           });
-        userTempId = ref(emailResponse.user_id);
         const currentUser = emailResponse.user_id;
 
         const response = await fetch(
