@@ -5,3 +5,11 @@ trash
 *.bin
 *.pyc
 backend/RAG/data/federated.json
+backend/.env
+backend/RAG/.env
+backend/README.md
+backend/render.yaml
+backend/requirements.txt
+backend/test_data.txt
+backend/test_data_base64.txt
+backend/test_frontend.html
