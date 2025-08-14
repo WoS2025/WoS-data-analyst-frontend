@@ -1,5 +1,5 @@
 <template>
-  <div :class="['header-bar', $props.class]">
+  <div :class="['header-bar', $attrs.class]">
     <div class="title">
       <img src="/src/assets/icon.jpg" width="40" height="40" />
       WoS Data Analysis Platform

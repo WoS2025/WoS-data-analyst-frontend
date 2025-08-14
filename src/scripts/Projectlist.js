@@ -183,7 +183,7 @@ export default {
         };
 
         try {
-          const response = await fetch(`${backendURL}/workspaces`, {
+          const response = await fetch(`${backendURL}/workspaces/`, {
             method: "POST",
             headers: this.getAuthHeaders(),
             body: JSON.stringify(data),

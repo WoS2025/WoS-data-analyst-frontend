@@ -9,12 +9,6 @@ export default {
   name: "HeaderBar",
   emits: ['toggle-panel'], // 聲明 emit 事件
   inheritAttrs: false, // 不自動繼承 class 等屬性
-  props: {
-    class: {
-      type: String,
-      default: ''
-    }
-  },
   data() {
     return {
       isLoginModalVisible: false,
