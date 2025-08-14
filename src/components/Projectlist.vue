@@ -1,7 +1,13 @@
 <template>
   <div :class="{ collapsed: isCollapsed }">
     <div class="project-list">
-      <ul v-if="!isCollapsed">
+      <!-- 載入狀態顯示 -->
+      <div v-if="isLoading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>載入工作區中...</p>
+      </div>
+      
+      <ul v-else-if="!isCollapsed">
         <li v-for="(project, index) in projects" :key="index">
           <ProjectItem
             :class="{ active: selectedProject === project }"

@@ -18,6 +18,7 @@ export default {
       newProjectName: "",
       isDeleteModalVisible: false,
       projectToDelete: "",
+      isLoading: false, // 新增載入狀態
     };
   },
   async mounted() {
@@ -56,6 +57,8 @@ export default {
         return;
       }
 
+      this.isLoading = true; // 開始載入
+
       try {
         // 獲取當前用戶 ID
         const currentUser = this.getCurrentUserId();
@@ -64,48 +67,19 @@ export default {
           return;
         }
 
+        // 使用新的批量API - 一次性獲取用戶所有工作區
         const response = await fetch(
-          `${backendURL}/user/${currentUser}`,
+          `${backendURL}/workspaces/user/${currentUser}`,
           {
-            method: "GET",
+            method: "GET", 
             headers: this.getAuthHeaders(),
           }
         );
 
         if (response.ok) {
-          const result = await response.json();
-          if (result.status === 'success') {
-            const workspaceIds = result.user.workspace_ids;
-            // 要用個for loop 把這位user的工作區一一列出來
-            const workspaceDetails = await Promise.all(
-              workspaceIds.map(async (workspaceId) => {
-                const workspaceResponse = await fetch(
-                  `${backendURL}/workspaces/${workspaceId}`,
-                  {
-                    method: "GET",
-                    headers: this.getAuthHeaders(),
-                  }
-                );
-
-                if (workspaceResponse.ok) {
-                  return await workspaceResponse.json();
-                } else {
-                  console.error(
-                    `獲取工作區 ${workspaceId} 詳細資料失敗`,
-                    workspaceResponse.statusText
-                  );
-                  return null;
-                }
-              })
-            );
-
-            this.projects = workspaceDetails.filter(
-              (workspace) => workspace !== null
-            );
-            console.log("this.projects", this.projects);
-          } else {
-            console.error("獲取用戶工作區失敗:", result.message);
-          }
+          const workspaces = await response.json();
+          this.projects = workspaces;
+          console.log("this.projects", this.projects);
         } else {
           console.error("獲取工作區失敗", response.statusText);
           // 使用統一的錯誤處理
@@ -113,6 +87,8 @@ export default {
         }
       } catch (error) {
         console.error("請求失敗", error);
+      } finally {
+        this.isLoading = false; // 結束載入
       }
     },
     showAddProjectModal() {
@@ -122,56 +98,6 @@ export default {
       this.showModal = false;
       this.newProjectName = "";
     },
-    async findLastWorkspace() {
-      console.log("addWorkspaceToUser");
-      try {
-        const response = await fetch(`${backendURL}/workspaces`, {
-          method: "GET",
-          headers: this.getAuthHeaders(),
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          console.log("所有工作區", result);
-
-          // 確保 result 是一個陣列，並且有至少一個工作區
-          if (Array.isArray(result) && result.length > 0) {
-            const lastWorkspace = result[result.length - 1].workspace_id;
-
-            console.log("最後一個工作區_id", lastWorkspace);
-            // 將剛加入的工作區的 ID 添加到用戶的 workspace_ids 中
-            const currentUser = this.getCurrentUserId();
-            if (!currentUser) {
-              console.error("無法獲取用戶ID");
-              return;
-            }
-
-            const userResponse = await fetch(
-              `${backendURL}/user/${currentUser}/workspace/${lastWorkspace}`,
-              {
-                method: "GET",
-                headers: this.getAuthHeaders(),
-              }
-            );
-
-            if (userResponse.ok) {
-              const userResult = await userResponse.json();
-              console.log("添加工作區到用戶成功:", userResult);
-            } else {
-              console.error("獲取用戶資料失敗", userResponse.statusText);
-              AuthService.handleApiError(userResponse);
-            }
-          } else {
-            console.error("沒有找到任何工作區");
-          }
-        } else {
-          console.error("獲取工作區失敗", response.statusText);
-          AuthService.handleApiError(response);
-        }
-      } catch (error) {
-        console.error("請求失敗", error);
-      }
-    }, // 這裡是新增工作區的函數，找到最後一個工作區，然後把它加到用戶的工作區列表裡
     async addProject() {
       if (!this.checkAuthStatus()) {
         return;
@@ -193,9 +119,34 @@ export default {
           if (response.ok) {
             const result = await response.json();
             console.log("新增工作區結果:", result);
+            
+            // 獲取當前用戶ID
+            const currentUser = this.getCurrentUserId();
+            if (currentUser && result.workspace && result.workspace.workspace_id) {
+              // 調用後端API將工作區添加到用戶
+              try {
+                const addToUserResponse = await fetch(
+                  `${backendURL}/user/${currentUser}/workspace/${result.workspace.workspace_id}`,
+                  {
+                    method: "GET",  // 使用GET方法，因為後端是這樣設計的
+                    headers: this.getAuthHeaders(),
+                  }
+                );
+                
+                if (addToUserResponse.ok) {
+                  console.log("成功將工作區添加到用戶");
+                } else {
+                  console.error("添加工作區到用戶失敗");
+                }
+              } catch (error) {
+                console.error("添加工作區到用戶請求失敗:", error);
+              }
+            }
+            
             alert("工作區新增成功");
             this.closeAddProjectModal();
-            await this.findLastWorkspace();
+            
+            // 重新載入工作區列表
             await this.fetchWorkspaces();
           } else {
             console.error("新增工作區失敗", response.statusText);
